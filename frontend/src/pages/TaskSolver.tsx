@@ -1,12 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Editor, { type OnMount } from '@monaco-editor/react';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
-import { Play, Send, RotateCcw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Play, Send, RotateCcw, Loader2, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 import { useTaskDetail } from '@/hooks';
+import { taskApi } from '@/services/api';
 import Navbar from '@/components/layout/Navbar';
-import type { Difficulty, Task } from '@/types';
+import type { Difficulty, Task, RunResponse, SubmitResponse, TestResult } from '@/types';
 
 const difficultyConfig: Record<Difficulty, { label: string; className: string }> = {
   beginner: { label: 'Beginner', className: 'bg-green/10 text-green border-green/30' },
@@ -28,37 +30,168 @@ const leftTabs: { id: LeftTab; label: string }[] = [
   { id: 'forum', label: 'Forum' },
 ];
 
+const statusBadgeConfig: Record<string, { label: string; className: string }> = {
+  passed: { label: 'Passed', className: 'bg-green/10 text-green border-green/30' },
+  failed: { label: 'Failed', className: 'bg-red-400/10 text-red-400 border-red-400/30' },
+  error: { label: 'Error', className: 'bg-amber/10 text-amber border-amber/30' },
+  timeout: { label: 'Timeout', className: 'bg-amber/10 text-amber border-amber/30' },
+  success: { label: 'Success', className: 'bg-green/10 text-green border-green/30' },
+  compile_error: {
+    label: 'Compile Error',
+    className: 'bg-red-400/10 text-red-400 border-red-400/30',
+  },
+  runtime_error: {
+    label: 'Runtime Error',
+    className: 'bg-red-400/10 text-red-400 border-red-400/30',
+  },
+};
+
+interface XPToast {
+  id: number;
+  xp: number;
+  leveledUp: boolean;
+  newLevel: number | null;
+}
+
+function TestResultItem({ result }: { result: TestResult }) {
+  return (
+    <div className="flex items-start gap-2 py-1.5">
+      {result.passed ? (
+        <CheckCircle2 className="w-4 h-4 text-green shrink-0 mt-0.5" />
+      ) : (
+        <XCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+      )}
+      <div className="flex-1 min-w-0">
+        <span className="font-code text-sm text-text-primary">{result.name}</span>
+        {result.message && (
+          <p className="font-code text-xs text-text-muted mt-0.5 whitespace-pre-wrap">
+            {result.message}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function XPToastNotification({ toast, onDismiss }: { toast: XPToast; onDismiss: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 100, y: 0 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      onAnimationComplete={(definition) => {
+        if (definition === 'exit') onDismiss();
+      }}
+      className="pointer-events-auto bg-dark-800 border border-green/30 rounded-lg p-4 shadow-lg min-w-[240px]"
+    >
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🎉</span>
+        <span className="font-display font-bold text-green">+{toast.xp} XP earned!</span>
+      </div>
+      {toast.leveledUp && toast.newLevel && (
+        <div className="mt-2 flex items-center gap-2">
+          <span className="text-lg">🚀</span>
+          <span className="font-display font-bold text-amber">
+            Level Up! You&apos;re now Level {toast.newLevel}
+          </span>
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+type OutputMode = 'idle' | 'running' | 'run_result' | 'submit_result';
+
+interface OutputState {
+  mode: OutputMode;
+  runResult?: RunResponse;
+  submitResult?: SubmitResponse;
+}
+
 function TaskSolverContent({ task }: { task: Task }) {
   const [code, setCode] = useState<string>(task.starter_code);
-  const [output, setOutput] = useState<string>('');
+  const [outputState, setOutputState] = useState<OutputState>({ mode: 'idle' });
   const [activeTab, setActiveTab] = useState<LeftTab>('description');
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [toasts, setToasts] = useState<XPToast[]>([]);
+  const toastIdRef = useRef(0);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const editorRef = useRef<any>(null);
 
-  function handleRun() {
-    setOutput(
-      `[Run] Executing code...\n\n// Output will appear here when the runner is connected.`,
-    );
-    console.log('[RustGym] Run triggered with code:', code.slice(0, 100) + '...');
+  const addXPToast = useCallback((xp: number, leveledUp: boolean, newLevel: number | null) => {
+    const id = ++toastIdRef.current;
+    setToasts((prev) => [...prev, { id, xp, leveledUp, newLevel }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
+  }, []);
+
+  const removeToast = useCallback((id: number) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  async function handleRun() {
+    if (isExecuting) return;
+    setIsExecuting(true);
+    setOutputState({ mode: 'running' });
+
+    try {
+      const result = await taskApi.run(task.slug, code);
+      setOutputState({ mode: 'run_result', runResult: result });
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      setOutputState({
+        mode: 'run_result',
+        runResult: {
+          status: 'runtime_error',
+          stdout: '',
+          stderr: err.message || 'An unexpected error occurred',
+          duration_ms: 0,
+        },
+      });
+    } finally {
+      setIsExecuting(false);
+    }
   }
 
-  function handleSubmit() {
-    setOutput(
-      `[Submit] Submitting code for grading...\n\n// Results will appear here when the runner is connected.`,
-    );
-    console.log('[RustGym] Submit triggered with code:', code.slice(0, 100) + '...');
+  async function handleSubmit() {
+    if (isExecuting) return;
+    setIsExecuting(true);
+    setOutputState({ mode: 'running' });
+
+    try {
+      const result = await taskApi.submit(task.slug, code);
+      setOutputState({ mode: 'submit_result', submitResult: result });
+
+      if (result.status === 'passed' && result.xp_awarded > 0) {
+        addXPToast(result.xp_awarded, result.leveled_up, result.new_level);
+      }
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      setOutputState({
+        mode: 'run_result',
+        runResult: {
+          status: 'runtime_error',
+          stdout: '',
+          stderr: err.message || 'An unexpected error occurred',
+          duration_ms: 0,
+        },
+      });
+    } finally {
+      setIsExecuting(false);
+    }
   }
 
   function handleReset() {
     setCode(task.starter_code);
     editorRef.current?.setValue(task.starter_code);
-    setOutput('');
+    setOutputState({ mode: 'idle' });
   }
 
   const handleEditorMount: OnMount = (editorInstance, monaco) => {
     editorRef.current = editorInstance;
 
-    // Define custom dark theme
     monaco.editor.defineTheme('rustgym-dark', {
       base: 'vs-dark',
       inherit: true,
@@ -81,7 +214,6 @@ function TaskSolverContent({ task }: { task: Task }) {
     });
     monaco.editor.setTheme('rustgym-dark');
 
-    // Add Ctrl+Enter shortcut for submit
     editorInstance.addAction({
       id: 'submit-code',
       label: 'Submit Code',
@@ -97,6 +229,20 @@ function TaskSolverContent({ task }: { task: Task }) {
   return (
     <div className="h-screen bg-dark-950 flex flex-col">
       <Navbar />
+
+      {/* XP Toast notifications */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <XPToastNotification
+              key={toast.id}
+              toast={toast}
+              onDismiss={() => removeToast(toast.id)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+
       <div className="pt-[62px] flex-1 flex flex-col overflow-hidden">
         {/* Task header bar */}
         <div className="flex items-center gap-4 px-4 py-2.5 border-b border-border bg-dark-900 shrink-0">
@@ -170,21 +316,32 @@ function TaskSolverContent({ task }: { task: Task }) {
             <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-dark-900 shrink-0">
               <button
                 onClick={handleRun}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-primary bg-dark-700 border border-border rounded-lg hover:border-border-light transition-colors"
+                disabled={isExecuting}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-primary bg-dark-700 border border-border rounded-lg hover:border-border-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Play className="w-3.5 h-3.5" />
+                {isExecuting ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Play className="w-3.5 h-3.5" />
+                )}
                 Run
               </button>
               <button
                 onClick={handleSubmit}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-light transition-colors"
+                disabled={isExecuting}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="w-3.5 h-3.5" />
+                {isExecuting ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Send className="w-3.5 h-3.5" />
+                )}
                 Submit
               </button>
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-muted hover:text-text-primary transition-colors ml-auto"
+                disabled={isExecuting}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-muted hover:text-text-primary transition-colors ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Reset
@@ -218,27 +375,151 @@ function TaskSolverContent({ task }: { task: Task }) {
             </div>
 
             {/* Output panel */}
-            <div className="h-[180px] border-t border-border bg-dark-900 flex flex-col shrink-0">
-              <div className="px-4 py-2 border-b border-border">
-                <span className="text-xs font-bold tracking-[1px] uppercase text-text-muted">
-                  Output
-                </span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4">
-                {output ? (
-                  <pre className="font-code text-sm text-text-secondary whitespace-pre-wrap">
-                    {output}
-                  </pre>
-                ) : (
-                  <p className="text-sm text-text-muted">
-                    Click &quot;Run&quot; or &quot;Submit&quot; to see output here.
-                  </p>
-                )}
-              </div>
-            </div>
+            <OutputPanel outputState={outputState} />
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function OutputPanel({ outputState }: { outputState: OutputState }) {
+  return (
+    <div className="h-[220px] border-t border-border bg-dark-900 flex flex-col shrink-0">
+      <div className="px-4 py-2 border-b border-border flex items-center gap-3">
+        <span className="text-xs font-bold tracking-[1px] uppercase text-text-muted">Output</span>
+        {outputState.mode === 'running' && (
+          <span className="flex items-center gap-1.5 text-xs text-text-muted">
+            <Loader2 className="w-3 h-3 animate-spin" />
+            Running...
+          </span>
+        )}
+        {outputState.mode === 'run_result' && outputState.runResult && (
+          <OutputStatusBadge status={outputState.runResult.status} />
+        )}
+        {outputState.mode === 'submit_result' && outputState.submitResult && (
+          <>
+            <OutputStatusBadge status={outputState.submitResult.status} />
+            <span className="text-xs text-text-muted ml-auto">
+              {outputState.submitResult.duration_ms}ms · {outputState.submitResult.memory_kb}KB
+            </span>
+          </>
+        )}
+        {outputState.mode === 'run_result' &&
+          outputState.runResult &&
+          outputState.runResult.duration_ms > 0 && (
+            <span className="text-xs text-text-muted ml-auto">
+              {outputState.runResult.duration_ms}ms
+            </span>
+          )}
+      </div>
+      <div className="flex-1 overflow-y-auto p-4">
+        {outputState.mode === 'idle' && (
+          <p className="text-sm text-text-muted">
+            Click &quot;Run&quot; or &quot;Submit&quot; to see output here.
+          </p>
+        )}
+        {outputState.mode === 'running' && (
+          <div className="flex items-center gap-2 text-sm text-text-muted">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Executing your code...
+          </div>
+        )}
+        {outputState.mode === 'run_result' && outputState.runResult && (
+          <RunResultView result={outputState.runResult} />
+        )}
+        {outputState.mode === 'submit_result' && outputState.submitResult && (
+          <SubmitResultView result={outputState.submitResult} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function OutputStatusBadge({ status }: { status: string }) {
+  const badge = statusBadgeConfig[status] || {
+    label: status,
+    className: 'bg-dark-700 text-text-muted border-border',
+  };
+  return (
+    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${badge.className}`}>
+      {badge.label}
+    </span>
+  );
+}
+
+function RunResultView({ result }: { result: RunResponse }) {
+  return (
+    <div className="space-y-2">
+      {result.stdout && (
+        <div>
+          <span className="text-xs font-bold text-text-muted uppercase tracking-wide">stdout</span>
+          <pre className="font-code text-sm text-text-secondary whitespace-pre-wrap mt-1">
+            {result.stdout}
+          </pre>
+        </div>
+      )}
+      {result.stderr && (
+        <div>
+          <span className="text-xs font-bold text-red-400 uppercase tracking-wide">stderr</span>
+          <pre className="font-code text-sm text-red-400/80 whitespace-pre-wrap mt-1">
+            {result.stderr}
+          </pre>
+        </div>
+      )}
+      {!result.stdout && !result.stderr && (
+        <p className="text-sm text-text-muted">No output produced.</p>
+      )}
+    </div>
+  );
+}
+
+function SubmitResultView({ result }: { result: SubmitResponse }) {
+  const passedCount = result.test_results.filter((t) => t.passed).length;
+  const totalCount = result.test_results.length;
+
+  return (
+    <div className="space-y-3">
+      {/* Summary */}
+      <div className="flex items-center gap-3">
+        {result.status === 'passed' ? (
+          <CheckCircle2 className="w-5 h-5 text-green" />
+        ) : result.status === 'failed' ? (
+          <XCircle className="w-5 h-5 text-red-400" />
+        ) : (
+          <AlertTriangle className="w-5 h-5 text-amber" />
+        )}
+        <span className="text-sm font-medium text-text-primary">
+          {passedCount}/{totalCount} tests passed
+        </span>
+      </div>
+
+      {/* Test results list */}
+      {result.test_results.length > 0 && (
+        <div className="space-y-0.5">
+          {result.test_results.map((test, i) => (
+            <TestResultItem key={i} result={test} />
+          ))}
+        </div>
+      )}
+
+      {/* stdout/stderr */}
+      {result.stdout && (
+        <div className="pt-2 border-t border-border">
+          <span className="text-xs font-bold text-text-muted uppercase tracking-wide">stdout</span>
+          <pre className="font-code text-xs text-text-secondary whitespace-pre-wrap mt-1">
+            {result.stdout}
+          </pre>
+        </div>
+      )}
+      {result.stderr && (
+        <div className="pt-2 border-t border-border">
+          <span className="text-xs font-bold text-red-400 uppercase tracking-wide">stderr</span>
+          <pre className="font-code text-xs text-red-400/80 whitespace-pre-wrap mt-1">
+            {result.stderr}
+          </pre>
+        </div>
+      )}
     </div>
   );
 }
@@ -252,7 +533,14 @@ export default function TaskSolver() {
       <div className="min-h-screen bg-dark-950">
         <Navbar />
         <div className="pt-[62px] flex items-center justify-center h-[calc(100vh-62px)]">
-          <div className="animate-pulse text-text-muted">Loading task...</div>
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="space-y-3 w-[400px]">
+              <div className="h-6 bg-dark-800 rounded animate-pulse" />
+              <div className="h-4 bg-dark-800 rounded animate-pulse w-3/4" />
+              <div className="h-4 bg-dark-800 rounded animate-pulse w-1/2" />
+            </div>
+          </div>
         </div>
       </div>
     );

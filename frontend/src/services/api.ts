@@ -1,4 +1,12 @@
-import type { AuthResponse, Quest, QuestDetail, LevelDetail, Task } from '@/types';
+import type {
+  AuthResponse,
+  Quest,
+  QuestDetail,
+  LevelDetail,
+  Task,
+  RunResponse,
+  SubmitResponse,
+} from '@/types';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
 
@@ -132,5 +140,19 @@ export const levelApi = {
 export const taskApi = {
   getBySlug(slug: string) {
     return request<Task>(`/tasks/${slug}`);
+  },
+
+  run(slug: string, code: string) {
+    return request<RunResponse>(`/tasks/${slug}/run`, {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+  },
+
+  submit(slug: string, code: string) {
+    return request<SubmitResponse>(`/tasks/${slug}/submit`, {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
   },
 };

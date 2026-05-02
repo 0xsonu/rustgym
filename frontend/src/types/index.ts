@@ -107,3 +107,26 @@ export interface Submission {
   attempt_number: number;
   created_at: string;
 }
+
+export interface SubmitResponse {
+  id: string;
+  status: 'passed' | 'failed' | 'error' | 'timeout';
+  test_results: TestResult[];
+  stdout: string;
+  stderr: string;
+  duration_ms: number;
+  memory_kb: number;
+  xp_awarded: number;
+  attempt_number: number;
+  leveled_up: boolean;
+  new_level: number | null;
+  new_xp: number | null;
+  created_at: string;
+}
+
+export interface RunResponse {
+  status: 'success' | 'compile_error' | 'timeout' | 'runtime_error';
+  stdout: string;
+  stderr: string;
+  duration_ms: number;
+}
