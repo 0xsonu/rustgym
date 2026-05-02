@@ -75,9 +75,7 @@ async fn register(
         .await?;
 
     if existing_username.is_some() {
-        return Err(AppError::Conflict(
-            "Username is already taken".to_string(),
-        ));
+        return Err(AppError::Conflict("Username is already taken".to_string()));
     }
 
     // Hash password

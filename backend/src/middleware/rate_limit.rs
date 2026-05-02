@@ -36,13 +36,15 @@ impl RateLimitScope {
 /// Uses Redis sliding window counters with graceful degradation.
 pub fn rate_limit_middleware(
     scope: RateLimitScope,
-) -> impl Fn(Request, Next) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<Response, StatusCode>> + Send>> + Clone
-{
+) -> impl Fn(
+    Request,
+    Next,
+) -> std::pin::Pin<
+    Box<dyn std::future::Future<Output = Result<Response, StatusCode>> + Send>,
+> + Clone {
     move |request: Request, next: Next| {
         let scope = scope;
-        Box::pin(async move {
-            rate_limit_inner(scope, request, next).await
-        })
+        Box::pin(async move { rate_limit_inner(scope, request, next).await })
     }
 }
 
@@ -52,7 +54,11 @@ async fn rate_limit_inner(
     next: Next,
 ) -> Result<Response, StatusCode> {
     // Try to get the Redis pool from extensions
-    let redis_pool = request.extensions().get::<Option<Pool>>().cloned().flatten();
+    let redis_pool = request
+        .extensions()
+        .get::<Option<Pool>>()
+        .cloned()
+        .flatten();
 
     // Extract client IP
     let ip = extract_client_ip(&request);
@@ -66,7 +72,10 @@ async fn rate_limit_inner(
             }
             Err(e) => {
                 // Graceful degradation: log warning and allow request if Redis is unavailable
-                tracing::warn!("Rate limiting unavailable (Redis error): {}. Allowing request.", e);
+                tracing::warn!(
+                    "Rate limiting unavailable (Redis error): {}. Allowing request.",
+                    e
+                );
             }
         }
     } else {

@@ -67,13 +67,19 @@ async fn main() {
                     Some(pool)
                 }
                 Err(e) => {
-                    tracing::warn!("Redis connection failed: {}. Rate limiting will be disabled.", e);
+                    tracing::warn!(
+                        "Redis connection failed: {}. Rate limiting will be disabled.",
+                        e
+                    );
                     None
                 }
             }
         }
         Err(e) => {
-            tracing::warn!("Failed to create Redis pool: {}. Rate limiting will be disabled.", e);
+            tracing::warn!(
+                "Failed to create Redis pool: {}. Rate limiting will be disabled.",
+                e
+            );
             None
         }
     };
@@ -96,12 +102,16 @@ async fn main() {
     let addr = format!("0.0.0.0:{}", config.server_port);
     tracing::info!("RustGym backend starting on {}", addr);
 
-    let listener = TcpListener::bind(&addr).await.expect("Failed to bind address");
+    let listener = TcpListener::bind(&addr)
+        .await
+        .expect("Failed to bind address");
     axum::serve(listener, app).await.expect("Server error");
 }
 
 /// Create a Redis connection pool from the given URL.
-fn create_redis_pool(redis_url: &str) -> Result<deadpool_redis::Pool, deadpool_redis::CreatePoolError> {
+fn create_redis_pool(
+    redis_url: &str,
+) -> Result<deadpool_redis::Pool, deadpool_redis::CreatePoolError> {
     let cfg = deadpool_redis::Config::from_url(redis_url);
     cfg.create_pool(Some(deadpool_redis::Runtime::Tokio1))
 }

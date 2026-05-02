@@ -20,18 +20,12 @@ impl Config {
     /// Panics if required environment variables are not set.
     pub fn from_env() -> Self {
         Self {
-            database_url: env::var("DATABASE_URL")
-                .expect("DATABASE_URL must be set"),
-            redis_url: env::var("REDIS_URL")
-                .expect("REDIS_URL must be set"),
-            jwt_secret: env::var("JWT_SECRET")
-                .expect("JWT_SECRET must be set"),
-            frontend_url: env::var("FRONTEND_URL")
-                .expect("FRONTEND_URL must be set"),
-            s3_bucket: env::var("S3_BUCKET")
-                .unwrap_or_else(|_| "rustgym".to_string()),
-            s3_region: env::var("S3_REGION")
-                .unwrap_or_else(|_| "us-east-1".to_string()),
+            database_url: env::var("DATABASE_URL").expect("DATABASE_URL must be set"),
+            redis_url: env::var("REDIS_URL").expect("REDIS_URL must be set"),
+            jwt_secret: env::var("JWT_SECRET").expect("JWT_SECRET must be set"),
+            frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
+            s3_bucket: env::var("S3_BUCKET").unwrap_or_else(|_| "rustgym".to_string()),
+            s3_region: env::var("S3_REGION").unwrap_or_else(|_| "us-east-1".to_string()),
             s3_endpoint: env::var("S3_ENDPOINT").ok(),
             server_port: env::var("SERVER_PORT")
                 .unwrap_or_else(|_| "3000".to_string())

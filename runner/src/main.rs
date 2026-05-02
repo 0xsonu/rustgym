@@ -1,4 +1,7 @@
-use axum::{routing::{get, post}, Json, Router};
+use axum::{
+    routing::{get, post},
+    Json, Router,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use tokio::net::TcpListener;
@@ -67,6 +70,8 @@ async fn main() {
     let addr = "0.0.0.0:3001";
     tracing::info!("RustGym runner service starting on {}", addr);
 
-    let listener = TcpListener::bind(addr).await.expect("Failed to bind address");
+    let listener = TcpListener::bind(addr)
+        .await
+        .expect("Failed to bind address");
     axum::serve(listener, app).await.expect("Server error");
 }

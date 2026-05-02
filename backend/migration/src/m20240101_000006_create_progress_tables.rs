@@ -1,4 +1,4 @@
-use sea_orm_migration::{prelude::*, prelude::extension::postgres::Type, schema::*};
+use sea_orm_migration::{prelude::extension::postgres::Type, prelude::*, schema::*};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -89,10 +89,20 @@ impl MigrationTrait for Migration {
                     .col(uuid(UserLevelProgress::Id).primary_key())
                     .col(uuid(UserLevelProgress::UserId).not_null())
                     .col(uuid(UserLevelProgress::LevelId).not_null())
-                    .col(integer(UserLevelProgress::TasksCompleted).default(0).not_null())
+                    .col(
+                        integer(UserLevelProgress::TasksCompleted)
+                            .default(0)
+                            .not_null(),
+                    )
                     .col(integer(UserLevelProgress::TasksTotal).not_null())
-                    .col(boolean(UserLevelProgress::IsCompleted).default(false).not_null())
-                    .col(timestamp_with_time_zone_null(UserLevelProgress::CompletedAt))
+                    .col(
+                        boolean(UserLevelProgress::IsCompleted)
+                            .default(false)
+                            .not_null(),
+                    )
+                    .col(timestamp_with_time_zone_null(
+                        UserLevelProgress::CompletedAt,
+                    ))
                     .col(
                         timestamp_with_time_zone(UserLevelProgress::CreatedAt)
                             .default(Expr::current_timestamp())
@@ -143,12 +153,26 @@ impl MigrationTrait for Migration {
                     .col(uuid(UserQuestProgress::Id).primary_key())
                     .col(uuid(UserQuestProgress::UserId).not_null())
                     .col(uuid(UserQuestProgress::QuestId).not_null())
-                    .col(integer(UserQuestProgress::LevelsCompleted).default(0).not_null())
+                    .col(
+                        integer(UserQuestProgress::LevelsCompleted)
+                            .default(0)
+                            .not_null(),
+                    )
                     .col(integer(UserQuestProgress::LevelsTotal).not_null())
-                    .col(integer(UserQuestProgress::TasksCompleted).default(0).not_null())
+                    .col(
+                        integer(UserQuestProgress::TasksCompleted)
+                            .default(0)
+                            .not_null(),
+                    )
                     .col(integer(UserQuestProgress::TasksTotal).not_null())
-                    .col(boolean(UserQuestProgress::IsCompleted).default(false).not_null())
-                    .col(timestamp_with_time_zone_null(UserQuestProgress::CompletedAt))
+                    .col(
+                        boolean(UserQuestProgress::IsCompleted)
+                            .default(false)
+                            .not_null(),
+                    )
+                    .col(timestamp_with_time_zone_null(
+                        UserQuestProgress::CompletedAt,
+                    ))
                     .col(
                         timestamp_with_time_zone(UserQuestProgress::CreatedAt)
                             .default(Expr::current_timestamp())

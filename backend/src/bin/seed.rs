@@ -87,10 +87,7 @@ async fn main() -> Result<()> {
     let manifest: Manifest =
         serde_json::from_str(&manifest_content).context("Failed to parse manifest.json")?;
 
-    info!(
-        "Manifest loaded: {} quests",
-        manifest.quests.len()
-    );
+    info!("Manifest loaded: {} quests", manifest.quests.len());
 
     seed_quests(&db, &manifest, &challenges_dir).await?;
 
@@ -100,7 +97,11 @@ async fn main() -> Result<()> {
 
 // ─── Seeding Logic ──────────────────────────────────────────────────────────
 
-async fn seed_quests(db: &DatabaseConnection, manifest: &Manifest, challenges_dir: &Path) -> Result<()> {
+async fn seed_quests(
+    db: &DatabaseConnection,
+    manifest: &Manifest,
+    challenges_dir: &Path,
+) -> Result<()> {
     // First pass: upsert all quests (without prerequisite_quest_id)
     for quest_manifest in &manifest.quests {
         upsert_quest(db, quest_manifest).await?;
@@ -119,7 +120,10 @@ async fn seed_quests(db: &DatabaseConnection, manifest: &Manifest, challenges_di
             .filter(quests::Column::Slug.eq(&quest_manifest.slug))
             .one(db)
             .await?
-            .context(format!("Quest '{}' not found after upsert", quest_manifest.slug))?;
+            .context(format!(
+                "Quest '{}' not found after upsert",
+                quest_manifest.slug
+            ))?;
 
         for level_manifest in &quest_manifest.levels {
             let level_id = upsert_level(db, &quest.id, level_manifest).await?;
@@ -338,9 +342,9 @@ async fn upsert_task(
 fn find_challenges_dir() -> Result<PathBuf> {
     // Try relative paths from common working directories
     let candidates = [
-        PathBuf::from("../challenges"),   // running from backend/
-        PathBuf::from("challenges"),       // running from project root
-        PathBuf::from("./challenges"),     // explicit current dir
+        PathBuf::from("../challenges"), // running from backend/
+        PathBuf::from("challenges"),    // running from project root
+        PathBuf::from("./challenges"),  // explicit current dir
     ];
 
     for candidate in &candidates {
