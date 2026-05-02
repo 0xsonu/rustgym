@@ -35,6 +35,8 @@ pub struct WorkspaceFiles {
     pub cargo_toml: String,
     pub lib_rs: String,
     pub test_rs: Option<String>,
+    /// If true, write lib_rs content as src/main.rs instead of src/lib.rs
+    pub as_binary: bool,
 }
 
 impl DockerExecutor {
@@ -48,10 +50,12 @@ impl DockerExecutor {
     ///
     /// Creates a container, copies files, runs the command, collects output,
     /// and cleans up — enforcing the configured wall-clock timeout.
+    /// An optional `timeout_override` can be provided to override the sandbox default.
     pub async fn execute(
         &self,
         files: WorkspaceFiles,
         cmd: Vec<String>,
+        timeout_override: Option<u64>,
     ) -> Result<ExecutionResult, ExecutorError> {
         let container_name = format!("rustgym-run-{}", uuid::Uuid::new_v4());
         let start = Instant::now();
@@ -86,7 +90,8 @@ impl DockerExecutor {
             .map_err(ExecutorError::Docker)?;
 
         // Wait for completion with timeout enforcement
-        let timeout_duration = Duration::from_secs(self.sandbox.timeout_secs);
+        let timeout_secs = timeout_override.unwrap_or(self.sandbox.timeout_secs);
+        let timeout_duration = Duration::from_secs(timeout_secs);
         let wait_result = timeout(timeout_duration, self.wait_for_container(&container_name)).await;
 
         let (exit_code, timed_out) = match wait_result {
@@ -200,8 +205,13 @@ fn build_tar_archive(files: &WorkspaceFiles) -> Result<Vec<u8>, ExecutorError> {
     // Add Cargo.toml
     append_file_to_tar(&mut archive, "Cargo.toml", files.cargo_toml.as_bytes())?;
 
-    // Add src/lib.rs
-    append_file_to_tar(&mut archive, "src/lib.rs", files.lib_rs.as_bytes())?;
+    // Add source file as either src/main.rs or src/lib.rs
+    let source_path = if files.as_binary {
+        "src/main.rs"
+    } else {
+        "src/lib.rs"
+    };
+    append_file_to_tar(&mut archive, source_path, files.lib_rs.as_bytes())?;
 
     // Add tests/tests.rs if provided
     if let Some(ref test_code) = files.test_rs {
