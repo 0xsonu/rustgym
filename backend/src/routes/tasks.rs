@@ -16,9 +16,10 @@ use crate::{
     error::AppError,
     middleware::auth::{auth_middleware, CurrentUser},
     services::{
+        achievement_service::{self, AchievementAwarded, SubmissionContext},
         progress_service,
         runner_client::{PlaygroundResponse, RunnerClient},
-        xp_service,
+        streak_service, xp_service,
     },
     AppState,
 };
@@ -155,6 +156,8 @@ struct SubmitResponse {
     leveled_up: bool,
     new_level: Option<i32>,
     new_xp: Option<i32>,
+    new_streak: Option<i32>,
+    achievements_awarded: Vec<AchievementAwarded>,
     created_at: String,
 }
 
@@ -260,6 +263,23 @@ async fn submit_task(
         progress_service::update_progress(&state.db, user_id, task.id).await?;
     }
 
+    // Update streak on any successful submission
+    let new_streak = if matches!(submission_status, submissions::SubmissionStatus::Passed) {
+        Some(streak_service::update_streak(&state.db, user_id).await?)
+    } else {
+        None
+    };
+
+    // Evaluate achievements
+    let submission_ctx = SubmissionContext {
+        task_id: task.id,
+        status: submission_status.clone(),
+        attempt_number,
+        duration_ms: run_result.duration_ms as i32,
+    };
+    let achievements_awarded =
+        achievement_service::evaluate_achievements(&state.db, user_id, &submission_ctx).await?;
+
     Ok(Json(SubmitResponse {
         id: submission_id,
         status: format!("{:?}", submission_status).to_lowercase(),
@@ -273,6 +293,8 @@ async fn submit_task(
         leveled_up,
         new_level,
         new_xp,
+        new_streak,
+        achievements_awarded,
         created_at: now.to_rfc3339(),
     }))
 }
