@@ -1,4 +1,6 @@
 pub mod auth;
+pub mod quests;
+pub mod tasks;
 pub mod users;
 
 use axum::Router;
@@ -10,4 +12,6 @@ pub fn api_router(state: &AppState) -> Router<AppState> {
     Router::new()
         .nest("/api/v1/auth", auth::router())
         .nest("/api/v1/users", users::router(state.clone()))
+        .nest("/api/v1/quests", quests::router())
+        .nest("/api/v1/tasks", tasks::router(state.clone()))
 }

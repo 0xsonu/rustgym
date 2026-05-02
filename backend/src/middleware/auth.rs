@@ -7,6 +7,58 @@ use axum::{
 
 use crate::{services::auth_service::Claims, AppState};
 
+/// Optional authenticated user extractor.
+/// Unlike `CurrentUser`, this does NOT fail if no token is present — it returns None.
+/// Use this for endpoints where auth is optional (e.g., quest listing with optional progress).
+#[derive(Debug, Clone)]
+pub struct OptionalCurrentUser(pub Option<CurrentUser>);
+
+impl<S> FromRequestParts<S> for OptionalCurrentUser
+where
+    S: Send + Sync,
+    AppState: FromRef<S>,
+{
+    type Rejection = std::convert::Infallible;
+
+    fn from_request_parts<'life0, 'life1, 'async_trait>(
+        parts: &'life0 mut Parts,
+        state: &'life1 S,
+    ) -> std::pin::Pin<
+        Box<dyn std::future::Future<Output = Result<Self, Self::Rejection>> + Send + 'async_trait>,
+    >
+    where
+        'life0: 'async_trait,
+        'life1: 'async_trait,
+        Self: 'async_trait,
+    {
+        Box::pin(async move {
+            let app_state = AppState::from_ref(state);
+
+            let token = parts
+                .headers
+                .get(header::AUTHORIZATION)
+                .and_then(|value| value.to_str().ok())
+                .and_then(|s| s.strip_prefix("Bearer "))
+                .map(|s| s.to_string());
+
+            let user = match token {
+                Some(t) => {
+                    match crate::services::auth_service::decode_access_token(
+                        &t,
+                        &app_state.config.jwt_secret,
+                    ) {
+                        Ok(claims) => Some(CurrentUser { claims }),
+                        Err(_) => None,
+                    }
+                }
+                None => None,
+            };
+
+            Ok(OptionalCurrentUser(user))
+        })
+    }
+}
+
 /// Authenticated user extracted from a valid JWT Bearer token.
 /// Use this as an extractor in handlers that require authentication:
 ///
