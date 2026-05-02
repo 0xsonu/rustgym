@@ -13,8 +13,32 @@ use sea_orm_migration::MigratorTrait as _;
 use serde_json::{json, Value};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 use crate::config::Config;
+
+#[derive(OpenApi)]
+#[openapi(
+    info(
+        title = "RustGym API",
+        version = "1.0.0",
+        description = "Interactive Rust learning platform API"
+    ),
+    paths(health_check),
+    tags(
+        (name = "health", description = "Health check endpoints"),
+        (name = "auth", description = "Authentication endpoints"),
+        (name = "users", description = "User profile endpoints"),
+        (name = "quests", description = "Quest and curriculum endpoints"),
+        (name = "tasks", description = "Challenge task endpoints"),
+        (name = "submissions", description = "Code submission endpoints"),
+        (name = "achievements", description = "Achievement endpoints"),
+        (name = "forum", description = "Community forum endpoints"),
+        (name = "admin", description = "Admin management endpoints"),
+    )
+)]
+struct ApiDoc;
 
 /// Shared application state available to all route handlers.
 #[derive(Clone)]
@@ -24,6 +48,15 @@ pub struct AppState {
     pub redis: Option<deadpool_redis::Pool>,
 }
 
+/// Health check endpoint returning service status.
+#[utoipa::path(
+    get,
+    path = "/api/v1/health",
+    tag = "health",
+    responses(
+        (status = 200, description = "Service is healthy", body = Value)
+    )
+)]
 async fn health_check() -> Json<Value> {
     Json(json!({
         "status": "ok",
@@ -96,6 +129,7 @@ async fn main() {
     let app = Router::new()
         .route("/api/v1/health", get(health_check))
         .merge(routes::api_router(&state))
+        .merge(SwaggerUi::new("/api/docs").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .layer(cors)
         .with_state(state);
 
