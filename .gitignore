@@ -1,0 +1,64 @@
+# =========================
+# Node / Frontend
+# =========================
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.vite/
+.cache/
+
+# =========================
+# Rust / Backend
+# =========================
+target/
+**/*.rs.bk
+Cargo.lock
+!backend/Cargo.lock
+!runner/Cargo.lock
+!cli/Cargo.lock
+
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# =========================
+# IDE & OS
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# =========================
+# Testing & Coverage
+# =========================
+coverage/
+*.lcov
+tarpaulin-report.html
+
+# =========================
+# MinIO data (local dev)
+# =========================
+minio-data/
