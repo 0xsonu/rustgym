@@ -15,7 +15,11 @@ use crate::{
     dto::quest::{SubmissionListResponse, SubmissionSummary, TaskDetailResponse},
     error::AppError,
     middleware::auth::{auth_middleware, CurrentUser},
-    services::runner_client::{PlaygroundResponse, RunnerClient},
+    services::{
+        progress_service,
+        runner_client::{PlaygroundResponse, RunnerClient},
+        xp_service,
+    },
     AppState,
 };
 
@@ -148,6 +152,9 @@ struct SubmitResponse {
     memory_kb: i32,
     xp_awarded: i32,
     attempt_number: i32,
+    leveled_up: bool,
+    new_level: Option<i32>,
+    new_xp: Option<i32>,
     created_at: String,
 }
 
@@ -239,6 +246,20 @@ async fn submit_task(
 
     new_submission.insert(&state.db).await?;
 
+    // Award XP and update progress if this is the first pass
+    let mut leveled_up = false;
+    let mut new_level = None;
+    let mut new_xp = None;
+
+    if xp_awarded > 0 {
+        let xp_result = xp_service::award_xp(&state.db, user_id, xp_awarded).await?;
+        leveled_up = xp_result.leveled_up;
+        new_level = Some(xp_result.new_level);
+        new_xp = Some(xp_result.new_xp);
+
+        progress_service::update_progress(&state.db, user_id, task.id).await?;
+    }
+
     Ok(Json(SubmitResponse {
         id: submission_id,
         status: format!("{:?}", submission_status).to_lowercase(),
@@ -249,6 +270,9 @@ async fn submit_task(
         memory_kb: run_result.memory_kb as i32,
         xp_awarded,
         attempt_number,
+        leveled_up,
+        new_level,
+        new_xp,
         created_at: now.to_rfc3339(),
     }))
 }
