@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use axum::{
     routing::{get, post},
     Json, Router,
@@ -6,6 +8,10 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+
+mod executor;
+mod output;
+mod sandbox;
 
 #[derive(Debug, Deserialize)]
 #[allow(dead_code)]
