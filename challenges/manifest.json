@@ -159,21 +159,144 @@
           "title": "Functions Basics",
           "description": "Define and call functions with parameters and return values.",
           "order_index": 4,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "simple-function",
+              "title": "Simple Function",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["functions", "parameters", "return"]
+            },
+            {
+              "slug": "function-parameters",
+              "title": "Function Parameters",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["functions", "parameters", "format"]
+            },
+            {
+              "slug": "return-values",
+              "title": "Return Values",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["functions", "return", "expressions"]
+            },
+            {
+              "slug": "helper-functions",
+              "title": "Helper Functions",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["functions", "composition", "math"]
+            },
+            {
+              "slug": "multi-return",
+              "title": "Multi Return",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["functions", "tuples", "multiple-return"]
+            }
+          ]
         },
         {
           "slug": "control-flow-if",
           "title": "Control Flow: If/Else",
           "description": "Use if/else expressions for conditional logic.",
           "order_index": 5,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-if-else",
+              "title": "Basic If/Else",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["if", "else", "conditions"]
+            },
+            {
+              "slug": "if-expression",
+              "title": "If Expression",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["if", "expression", "let"]
+            },
+            {
+              "slug": "nested-conditions",
+              "title": "Nested Conditions",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["if", "else-if", "grading"]
+            },
+            {
+              "slug": "compound-logic",
+              "title": "Compound Logic",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["if", "and", "or", "leap-year"]
+            },
+            {
+              "slug": "fizzbuzz",
+              "title": "FizzBuzz",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["if", "modulo", "fizzbuzz"]
+            }
+          ]
         },
         {
           "slug": "loops-and-iteration",
           "title": "Loops & Iteration",
           "description": "Master loop, while, and for loops.",
           "order_index": 6,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-loop",
+              "title": "Basic Loop",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["loop", "break", "infinite"]
+            },
+            {
+              "slug": "while-loop",
+              "title": "While Loop",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["while", "condition", "digits"]
+            },
+            {
+              "slug": "for-range",
+              "title": "For Range",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["for", "range", "sum"]
+            },
+            {
+              "slug": "loop-with-break",
+              "title": "Loop with Break",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["for", "break", "search"]
+            },
+            {
+              "slug": "nested-loops",
+              "title": "Nested Loops",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["for", "nested", "multiplication"]
+            }
+          ]
         },
         {
           "slug": "arrays-and-slices",
@@ -378,21 +501,144 @@
           "title": "References & Borrowing",
           "description": "Borrow values with immutable references.",
           "order_index": 4,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-reference",
+              "title": "Basic Reference",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["reference", "borrow", "string"]
+            },
+            {
+              "slug": "multiple-borrows",
+              "title": "Multiple Borrows",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["reference", "multiple", "lifetime"]
+            },
+            {
+              "slug": "borrow-in-function",
+              "title": "Borrow in Function",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["borrow", "function", "str"]
+            },
+            {
+              "slug": "borrow-vec",
+              "title": "Borrow Vec",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["borrow", "vec", "sum"]
+            },
+            {
+              "slug": "shared-access",
+              "title": "Shared Access",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["borrow", "multiple", "intersection"]
+            }
+          ]
         },
         {
           "slug": "mutable-references",
           "title": "Mutable References",
           "description": "Modify borrowed values with &mut.",
           "order_index": 5,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-mut-ref",
+              "title": "Basic Mut Ref",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["mut", "reference", "push-str"]
+            },
+            {
+              "slug": "modify-vec",
+              "title": "Modify Vec",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["mut", "vec", "iter-mut"]
+            },
+            {
+              "slug": "swap-values",
+              "title": "Swap Values",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["mut", "dereference", "swap"]
+            },
+            {
+              "slug": "filter-in-place",
+              "title": "Filter In Place",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["mut", "retain", "filter"]
+            },
+            {
+              "slug": "transform-string",
+              "title": "Transform String",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["mut", "string", "capitalize"]
+            }
+          ]
         },
         {
           "slug": "slice-types",
           "title": "Slice Types",
           "description": "Work with string slices and array slices.",
           "order_index": 6,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "string-slices",
+              "title": "String Slices",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["slice", "str", "first-word"]
+            },
+            {
+              "slug": "array-slices",
+              "title": "Array Slices",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["slice", "array", "sum"]
+            },
+            {
+              "slug": "slice-patterns",
+              "title": "Slice Patterns",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["slice", "subslice", "range"]
+            },
+            {
+              "slug": "slice-search",
+              "title": "Slice Search",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["slice", "search", "subslice-sum"]
+            },
+            {
+              "slug": "split-at-delimiter",
+              "title": "Split at Delimiter",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["slice", "split", "parsing"]
+            }
+          ]
         },
         {
           "slug": "lifetime-basics",
@@ -752,21 +998,144 @@
           "title": "Result Type",
           "description": "Use Result<T, E> for recoverable errors.",
           "order_index": 1,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-result",
+              "title": "Basic Result",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["result", "ok", "err"]
+            },
+            {
+              "slug": "result-matching",
+              "title": "Result Matching",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["result", "match", "divide"]
+            },
+            {
+              "slug": "result-map",
+              "title": "Result Map",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["result", "map", "map-err"]
+            },
+            {
+              "slug": "unwrap-or",
+              "title": "Unwrap Or",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["result", "unwrap-or", "default"]
+            },
+            {
+              "slug": "result-chaining",
+              "title": "Result Chaining",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["result", "and-then", "validation"]
+            }
+          ]
         },
         {
           "slug": "question-mark-operator",
           "title": "The ? Operator",
           "description": "Propagate errors concisely with the ? operator.",
           "order_index": 2,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-question-mark",
+              "title": "Basic Question Mark",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["question-mark", "parse", "propagate"]
+            },
+            {
+              "slug": "chained-operations",
+              "title": "Chained Operations",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["question-mark", "map-err", "chain"]
+            },
+            {
+              "slug": "option-question-mark",
+              "title": "Option Question Mark",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["question-mark", "option", "none"]
+            },
+            {
+              "slug": "multi-step-parsing",
+              "title": "Multi-Step Parsing",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["question-mark", "parsing", "struct"]
+            },
+            {
+              "slug": "propagate-errors",
+              "title": "Propagate Errors",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["question-mark", "loop", "filter"]
+            }
+          ]
         },
         {
           "slug": "custom-error-types",
           "title": "Custom Error Types",
           "description": "Define your own error types with enums.",
           "order_index": 3,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "error-enum",
+              "title": "Error Enum",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["error", "enum", "display"]
+            },
+            {
+              "slug": "from-impl",
+              "title": "From Impl",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["error", "from", "conversion"]
+            },
+            {
+              "slug": "error-display",
+              "title": "Error Display",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["error", "display", "struct-variant"]
+            },
+            {
+              "slug": "error-context",
+              "title": "Error Context",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["error", "context", "calculator"]
+            },
+            {
+              "slug": "error-hierarchy",
+              "title": "Error Hierarchy",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["error", "hierarchy", "from"]
+            }
+          ]
         },
         {
           "slug": "error-conversion",
@@ -819,21 +1188,144 @@
           "title": "Vectors",
           "description": "Use Vec<T> for dynamic arrays.",
           "order_index": 1,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "create-and-push",
+              "title": "Create and Push",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["vec", "push", "new"]
+            },
+            {
+              "slug": "vec-operations",
+              "title": "Vec Operations",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["vec", "rotate", "drain"]
+            },
+            {
+              "slug": "vec-filter-map",
+              "title": "Vec Filter Map",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["vec", "filter", "map", "iter"]
+            },
+            {
+              "slug": "vec-sorting",
+              "title": "Vec Sorting",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["vec", "sort", "sort-by"]
+            },
+            {
+              "slug": "vec-dedup",
+              "title": "Vec Dedup",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["vec", "dedup", "sort", "unique"]
+            }
+          ]
         },
         {
           "slug": "hashmaps",
           "title": "HashMaps",
           "description": "Store key-value pairs with HashMap.",
           "order_index": 2,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "word-count",
+              "title": "Word Count",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["hashmap", "entry", "count"]
+            },
+            {
+              "slug": "group-by",
+              "title": "Group By",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["hashmap", "group", "entry"]
+            },
+            {
+              "slug": "two-sum",
+              "title": "Two Sum",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["hashmap", "lookup", "complement"]
+            },
+            {
+              "slug": "merge-maps",
+              "title": "Merge Maps",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["hashmap", "merge", "entry"]
+            },
+            {
+              "slug": "most-frequent",
+              "title": "Most Frequent",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["hashmap", "max", "frequency"]
+            }
+          ]
         },
         {
           "slug": "hashsets-and-btrees",
           "title": "HashSets & BTrees",
           "description": "Use HashSet and BTreeMap for specialized collections.",
           "order_index": 3,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-hashset",
+              "title": "Basic HashSet",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["hashset", "unique", "dedup"]
+            },
+            {
+              "slug": "set-operations",
+              "title": "Set Operations",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["hashset", "intersection", "union"]
+            },
+            {
+              "slug": "btreemap-basics",
+              "title": "BTreeMap Basics",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["btreemap", "sorted", "scores"]
+            },
+            {
+              "slug": "range-queries",
+              "title": "Range Queries",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["btreemap", "range", "query"]
+            },
+            {
+              "slug": "frequency-counter",
+              "title": "Frequency Counter",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["hashmap", "sort", "frequency"]
+            }
+          ]
         },
         {
           "slug": "closures",

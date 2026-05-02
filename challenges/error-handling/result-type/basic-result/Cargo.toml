@@ -1,0 +1,11 @@
+[package]
+name = "basic-result"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+[[test]]
+name = "tests"
+path = "tests/tests.rs"
