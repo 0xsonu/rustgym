@@ -7,6 +7,7 @@ use serde_json::json;
 
 /// Application error type with variants for common HTTP error responses.
 #[derive(Debug, thiserror::Error)]
+#[allow(dead_code)]
 pub enum AppError {
     #[error("Not found: {0}")]
     NotFound(String),

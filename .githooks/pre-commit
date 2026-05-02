@@ -1,0 +1,41 @@
+#!/bin/bash
+# Pre-commit hook: runs formatting, clippy, and lint checks before allowing a commit.
+
+set -e
+
+echo "🦀 Running pre-commit checks..."
+
+# Backend: fmt + clippy
+echo "  → Backend: cargo fmt --check"
+(cd backend && cargo fmt --check) || {
+    echo "❌ Backend formatting failed. Run 'cd backend && cargo fmt' to fix."
+    exit 1
+}
+
+echo "  → Backend: cargo clippy"
+(cd backend && cargo clippy -- -D warnings 2>&1) || {
+    echo "❌ Backend clippy failed."
+    exit 1
+}
+
+# Runner: fmt + clippy
+echo "  → Runner: cargo fmt --check"
+(cd runner && cargo fmt --check) || {
+    echo "❌ Runner formatting failed. Run 'cd runner && cargo fmt' to fix."
+    exit 1
+}
+
+echo "  → Runner: cargo clippy"
+(cd runner && cargo clippy -- -D warnings 2>&1) || {
+    echo "❌ Runner clippy failed."
+    exit 1
+}
+
+# Frontend: lint
+echo "  → Frontend: pnpm lint"
+(cd frontend && pnpm run lint) || {
+    echo "❌ Frontend lint failed."
+    exit 1
+}
+
+echo "✅ All pre-commit checks passed!"

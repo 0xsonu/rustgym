@@ -25,11 +25,13 @@ impl CurrentUser {
     }
 
     /// The user's username.
+    #[allow(dead_code)]
     pub fn username(&self) -> &str {
         &self.claims.username
     }
 
     /// The user's role.
+    #[allow(dead_code)]
     pub fn role(&self) -> &str {
         &self.claims.role
     }

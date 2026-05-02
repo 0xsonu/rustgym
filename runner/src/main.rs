@@ -8,6 +8,7 @@ use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct RunTestRequest {
     /// Base64-encoded user code
     code: String,
@@ -18,12 +19,14 @@ struct RunTestRequest {
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct PlaygroundRequest {
     /// Base64-encoded user code
     code: String,
 }
 
 #[derive(Debug, Serialize)]
+#[allow(dead_code)]
 struct RunResponse {
     status: String,
     stdout: String,
