@@ -9,6 +9,7 @@ use std::sync::Arc;
 
 use axum::{routing::get, Json, Router};
 use sea_orm::Database;
+use sea_orm_migration::MigratorTrait as _;
 use serde_json::{json, Value};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
@@ -50,6 +51,12 @@ async fn main() {
 
     tracing::info!("Connected to database");
 
+    // Run migrations
+    migration::Migrator::up(&db, None)
+        .await
+        .expect("Failed to run migrations");
+    tracing::info!("Migrations applied successfully");
+
     // Try to connect to Redis (graceful degradation if unavailable)
     let redis = match create_redis_pool(&config.redis_url) {
         Ok(pool) => {
@@ -82,7 +89,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/api/v1/health", get(health_check))
-        .merge(routes::api_router())
+        .merge(routes::api_router(&state))
         .layer(cors)
         .with_state(state);
 

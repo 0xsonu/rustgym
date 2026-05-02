@@ -1,2 +1,2 @@
-// Zustand stores (authStore, editorStore, etc.)
-export {};
+// Zustand stores
+export { useAuthStore } from './authStore';

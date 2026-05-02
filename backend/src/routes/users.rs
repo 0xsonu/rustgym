@@ -24,10 +24,10 @@ use entity::users;
 ///
 /// - `/me` routes require auth middleware
 /// - `/:username` is public
-pub fn router() -> Router<AppState> {
+pub fn router(state: AppState) -> Router<AppState> {
     let me_routes = Router::new()
         .route("/me", get(get_my_profile).put(update_my_profile))
-        .layer(middleware::from_fn(auth_middleware));
+        .route_layer(middleware::from_fn_with_state(state, auth_middleware));
 
     Router::new()
         .merge(me_routes)
