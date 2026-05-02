@@ -14,22 +14,146 @@
           "title": "Variables & Types",
           "description": "Learn about variable bindings, mutability, and primitive types.",
           "order_index": 1,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "hello-variables",
+              "title": "Hello Variables",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["variables", "let", "string"]
+            },
+            {
+              "slug": "mutable-variables",
+              "title": "Mutable Variables",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["variables", "mut", "mutability"]
+            },
+            {
+              "slug": "type-annotations",
+              "title": "Type Annotations",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 3,
+              "tags": ["types", "annotations", "primitives"]
+            },
+            {
+              "slug": "shadowing",
+              "title": "Shadowing",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["variables", "shadowing"]
+            },
+            {
+              "slug": "multiple-bindings",
+              "title": "Multiple Bindings",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 5,
+              "tags": ["variables", "tuples", "bindings"]
+            }
+          ]
         },
         {
           "slug": "numbers-and-math",
           "title": "Numbers & Math",
           "description": "Work with integers, floats, and arithmetic operations.",
           "order_index": 2,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-arithmetic",
+              "title": "Basic Arithmetic",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["arithmetic", "operators", "math"]
+            },
+            {
+              "slug": "integer-types",
+              "title": "Integer Types",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["integers", "types", "limits"]
+            },
+            {
+              "slug": "float-operations",
+              "title": "Float Operations",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["floats", "math", "methods"]
+            },
+            {
+              "slug": "temperature-converter",
+              "title": "Temperature Converter",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["math", "conversion", "formulas"]
+            },
+            {
+              "slug": "number-classifier",
+              "title": "Number Classifier",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["comparison", "classification", "remainder"]
+            }
+          ]
         },
         {
           "slug": "booleans-and-comparison",
           "title": "Booleans & Comparison",
           "description": "Explore boolean logic and comparison operators.",
           "order_index": 3,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "boolean-basics",
+              "title": "Boolean Basics",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["bool", "comparison", "operators"]
+            },
+            {
+              "slug": "logical-operators",
+              "title": "Logical Operators",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["bool", "and", "or", "not"]
+            },
+            {
+              "slug": "comparison-chain",
+              "title": "Comparison Chain",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["comparison", "if-else", "ranges"]
+            },
+            {
+              "slug": "range-checker",
+              "title": "Range Checker",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["ranges", "logic", "leap-year"]
+            },
+            {
+              "slug": "boolean-puzzle",
+              "title": "Boolean Puzzle",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["xor", "logic", "boolean-algebra"]
+            }
+          ]
         },
+
         {
           "slug": "functions-basics",
           "title": "Functions Basics",
@@ -109,22 +233,146 @@
           "title": "Ownership Rules",
           "description": "Learn the three rules of ownership in Rust.",
           "order_index": 1,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "single-owner",
+              "title": "Single Owner",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["ownership", "string", "heap"]
+            },
+            {
+              "slug": "scope-and-drop",
+              "title": "Scope and Drop",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 2,
+              "tags": ["ownership", "scope", "drop"]
+            },
+            {
+              "slug": "transfer-ownership",
+              "title": "Transfer Ownership",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["ownership", "functions", "move"]
+            },
+            {
+              "slug": "return-ownership",
+              "title": "Return Ownership",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 4,
+              "tags": ["ownership", "return", "tuple"]
+            },
+            {
+              "slug": "ownership-functions",
+              "title": "Ownership in Functions",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["ownership", "vec", "functions"]
+            }
+          ]
         },
         {
           "slug": "move-semantics",
           "title": "Move Semantics",
           "description": "Understand how values move between variables.",
           "order_index": 2,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-move",
+              "title": "Basic Move",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["move", "string", "assignment"]
+            },
+            {
+              "slug": "move-into-function",
+              "title": "Move Into Function",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 2,
+              "tags": ["move", "functions", "vec"]
+            },
+            {
+              "slug": "move-in-loops",
+              "title": "Move in Loops",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["move", "into_iter", "loops"]
+            },
+            {
+              "slug": "partial-move",
+              "title": "Partial Move",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["move", "struct", "fields"]
+            },
+            {
+              "slug": "move-collection",
+              "title": "Move Collection",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["move", "iterators", "filter", "map"]
+            }
+          ]
         },
         {
           "slug": "copy-and-clone",
           "title": "Copy & Clone",
           "description": "Learn when types are copied vs moved.",
           "order_index": 3,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "copy-types",
+              "title": "Copy Types",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["copy", "primitives", "stack"]
+            },
+            {
+              "slug": "clone-strings",
+              "title": "Clone Strings",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 2,
+              "tags": ["clone", "string", "deep-copy"]
+            },
+            {
+              "slug": "derive-copy",
+              "title": "Derive Copy",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["derive", "copy", "struct"]
+            },
+            {
+              "slug": "clone-vs-copy",
+              "title": "Clone vs Copy",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["clone", "copy", "vec"]
+            },
+            {
+              "slug": "custom-clone",
+              "title": "Custom Clone",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["clone", "derive", "struct"]
+            }
+          ]
         },
+
         {
           "slug": "references-and-borrowing",
           "title": "References & Borrowing",
@@ -190,15 +438,98 @@
           "title": "Struct Definition",
           "description": "Define and instantiate structs with named fields.",
           "order_index": 1,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-struct",
+              "title": "Basic Struct",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["struct", "fields", "instantiation"]
+            },
+            {
+              "slug": "struct-update",
+              "title": "Struct Update Syntax",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 2,
+              "tags": ["struct", "update-syntax", "spread"]
+            },
+            {
+              "slug": "struct-with-methods",
+              "title": "Struct with Fields",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["struct", "fields", "functions"]
+            },
+            {
+              "slug": "nested-structs",
+              "title": "Nested Structs",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["struct", "nested", "composition"]
+            },
+            {
+              "slug": "builder-pattern",
+              "title": "Builder Pattern",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["struct", "builder", "pattern"]
+            }
+          ]
         },
         {
           "slug": "methods-and-impl",
           "title": "Methods & Impl",
           "description": "Add behavior to structs with impl blocks.",
           "order_index": 2,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-impl",
+              "title": "Basic Impl",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["impl", "methods", "self"]
+            },
+            {
+              "slug": "mutable-methods",
+              "title": "Mutable Methods",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 2,
+              "tags": ["impl", "mut-self", "methods"]
+            },
+            {
+              "slug": "associated-functions",
+              "title": "Associated Functions",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["impl", "associated", "constructor"]
+            },
+            {
+              "slug": "method-chaining",
+              "title": "Method Chaining",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["impl", "chaining", "builder"]
+            },
+            {
+              "slug": "multiple-impl",
+              "title": "Multiple Methods",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["impl", "methods", "bank-account"]
+            }
+          ]
         },
+
         {
           "slug": "tuple-structs-and-unit",
           "title": "Tuple Structs & Unit Structs",
@@ -257,15 +588,98 @@
           "title": "Trait Definition",
           "description": "Define traits with required and default methods.",
           "order_index": 1,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "basic-trait",
+              "title": "Basic Trait",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["trait", "definition", "implement"]
+            },
+            {
+              "slug": "default-methods",
+              "title": "Default Methods",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 2,
+              "tags": ["trait", "default", "override"]
+            },
+            {
+              "slug": "multiple-methods-trait",
+              "title": "Multiple Methods Trait",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 3,
+              "tags": ["trait", "methods", "shape"]
+            },
+            {
+              "slug": "trait-as-parameter",
+              "title": "Trait as Parameter",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["trait", "impl-trait", "parameter"]
+            },
+            {
+              "slug": "trait-return-type",
+              "title": "Trait Return Type",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["trait", "impl-trait", "return"]
+            }
+          ]
         },
         {
           "slug": "implementing-traits",
           "title": "Implementing Traits",
           "description": "Implement traits for your custom types.",
           "order_index": 2,
-          "tasks": []
+          "tasks": [
+            {
+              "slug": "display-trait",
+              "title": "Display Trait",
+              "difficulty": "beginner",
+              "xp_reward": 50,
+              "order_index": 1,
+              "tags": ["display", "fmt", "formatting"]
+            },
+            {
+              "slug": "from-trait",
+              "title": "From Trait",
+              "difficulty": "easy",
+              "xp_reward": 75,
+              "order_index": 2,
+              "tags": ["from", "into", "conversion"]
+            },
+            {
+              "slug": "iterator-impl",
+              "title": "Iterator Implementation",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 3,
+              "tags": ["iterator", "next", "custom"]
+            },
+            {
+              "slug": "partial-eq-impl",
+              "title": "PartialEq & PartialOrd",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 4,
+              "tags": ["partial-eq", "partial-ord", "comparison"]
+            },
+            {
+              "slug": "multiple-traits",
+              "title": "Multiple Traits",
+              "difficulty": "medium",
+              "xp_reward": 100,
+              "order_index": 5,
+              "tags": ["display", "partial-eq", "partial-ord"]
+            }
+          ]
         },
+
         {
           "slug": "derive-macros",
           "title": "Derive Macros",
