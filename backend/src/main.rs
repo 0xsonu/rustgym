@@ -1,13 +1,25 @@
 mod config;
+mod dto;
 mod error;
+mod routes;
 mod services;
 
+use std::sync::Arc;
+
 use axum::{routing::get, Json, Router};
+use sea_orm::Database;
 use serde_json::{json, Value};
 use tokio::net::TcpListener;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 use crate::config::Config;
+
+/// Shared application state available to all route handlers.
+#[derive(Clone)]
+pub struct AppState {
+    pub db: sea_orm::DatabaseConnection,
+    pub config: Arc<Config>,
+}
 
 async fn health_check() -> Json<Value> {
     Json(json!({
@@ -29,7 +41,22 @@ async fn main() {
 
     let config = Config::from_env();
 
-    let app = Router::new().route("/api/v1/health", get(health_check));
+    // Connect to the database
+    let db = Database::connect(&config.database_url)
+        .await
+        .expect("Failed to connect to database");
+
+    tracing::info!("Connected to database");
+
+    let state = AppState {
+        db,
+        config: Arc::new(config.clone()),
+    };
+
+    let app = Router::new()
+        .route("/api/v1/health", get(health_check))
+        .merge(routes::api_router())
+        .with_state(state);
 
     let addr = format!("0.0.0.0:{}", config.server_port);
     tracing::info!("RustGym backend starting on {}", addr);
