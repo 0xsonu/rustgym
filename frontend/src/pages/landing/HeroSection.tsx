@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function HeroSection() {
   return (
     <section className="min-h-screen pt-[120px] pb-20 px-5 md:px-10 flex items-center relative overflow-hidden">
@@ -32,18 +34,18 @@ export default function HeroSection() {
             with instant feedback.
           </p>
           <div className="flex items-center gap-4 mb-11 flex-wrap">
-            <a
-              href="#"
+            <Link
+              to="/register"
               className="bg-primary text-white px-7 py-3.5 rounded-[10px] text-[15px] font-semibold transition-all hover:bg-primary-light hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(206,66,43,0.35)] inline-flex items-center gap-2"
             >
               🚀 Start Learning Free
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/quests"
               className="text-text-secondary text-sm font-medium inline-flex items-center gap-1.5 transition-colors hover:text-text-primary"
             >
               See the curriculum →
-            </a>
+            </Link>
           </div>
           <div className="flex items-center gap-5 flex-wrap">
             <Badge score="4.9" source="G2 Rating" count="1,200+ reviews" />
@@ -68,121 +70,99 @@ export default function HeroSection() {
               main.rs — RustGym IDE
             </div>
           </div>
-          <div className="p-6 font-code text-[13.5px] leading-[1.8]">
-            <span className="text-[#5a6a6a]">{'// Quest 3 • Ownership & Borrowing'}</span>
-            <br />
-            <span className="text-[#5a6a6a]">{'// Task: Implement a safe string processor'}</span>
-            <br />
-            <br />
-            <span className="text-[#c678dd]">use</span> <span className="text-[#e5c07b]">std</span>
-            <span className="text-text-muted">::</span>
-            <span className="text-[#e5c07b]">collections</span>
-            <span className="text-text-muted">::</span>
-            <span className="text-[#e5c07b]">HashMap</span>
-            <span className="text-text-muted">;</span>
-            <br />
-            <br />
-            <span className="text-[#c678dd]">fn</span>{' '}
-            <span className="text-[#61afef]">word_count</span>
-            <span className="text-text-muted">&lt;</span>
-            <span className="text-primary-light">&apos;a</span>
-            <span className="text-text-muted">&gt;(</span>
-            <br />
-            {'    '}
-            <span className="text-text-primary">text</span>
-            <span className="text-text-muted">: &amp;</span>
-            <span className="text-primary-light">&apos;a</span>{' '}
-            <span className="text-[#e5c07b]">str</span>
-            <br />
-            <span className="text-text-muted">{') -> '}</span>
-            <span className="text-[#e5c07b]">HashMap</span>
-            <span className="text-text-muted">&lt;&amp;</span>
-            <span className="text-primary-light">&apos;a</span>{' '}
-            <span className="text-[#e5c07b]">str</span>
-            <span className="text-text-muted">, </span>
-            <span className="text-[#e5c07b]">usize</span>
-            <span className="text-text-muted">{'> {'}</span>
-            <br />
-            {'    '}
-            <span className="text-[#c678dd]">let mut</span>{' '}
-            <span className="text-text-primary">map</span>{' '}
-            <span className="text-text-muted">= </span>
-            <span className="text-[#e5c07b]">HashMap</span>
-            <span className="text-text-muted">::</span>
-            <span className="text-[#61afef]">new</span>
-            <span className="text-text-muted">();</span>
-            <br />
-            {'    '}
-            <span className="text-[#c678dd]">for</span>{' '}
-            <span className="text-text-primary">word</span>{' '}
-            <span className="text-[#c678dd]">in</span>{' '}
-            <span className="text-text-primary">text</span>
-            <span className="text-text-muted">.</span>
-            <span className="text-[#61afef]">split_whitespace</span>
-            <span className="text-text-muted">{'() {'}</span>
-            <br />
-            {'        '}
-            <span className="text-[#c678dd]">let</span>{' '}
-            <span className="text-text-primary">count</span>{' '}
-            <span className="text-text-muted">= </span>
-            <span className="text-text-primary">map</span>
-            <span className="text-text-muted">.</span>
-            <span className="text-[#61afef]">entry</span>
-            <span className="text-text-muted">(</span>
-            <span className="text-text-primary">word</span>
-            <span className="text-text-muted">).</span>
-            <span className="text-[#61afef]">or_insert</span>
-            <span className="text-text-muted">(</span>
-            <span className="text-[#d19a66]">0</span>
-            <span className="text-text-muted">);</span>
-            <br />
-            {'        '}
-            <span className="text-text-muted">*</span>
-            <span className="text-text-primary">count</span>{' '}
-            <span className="text-text-muted">+= </span>
-            <span className="text-[#d19a66]">1</span>
-            <span className="text-text-muted">;</span>
-            <br />
-            {'    '}
-            <span className="text-text-muted">{'}'}</span>
-            <br />
-            {'    '}
-            <span className="text-text-primary">map</span>
-            <br />
-            <span className="text-text-muted">{'}'}</span>
-            <br />
-            <br />
-            <span className="text-[#c678dd]">fn</span> <span className="text-[#61afef]">main</span>
-            <span className="text-text-muted">{'() {'}</span>
-            <br />
-            {'    '}
-            <span className="text-[#c678dd]">let</span>{' '}
-            <span className="text-text-primary">text</span>{' '}
-            <span className="text-text-muted">= </span>
-            <span className="text-[#98c379]">&quot;hello world hello rust&quot;</span>
-            <span className="text-text-muted">;</span>
-            <br />
-            {'    '}
-            <span className="text-amber">println!</span>
-            <span className="text-text-muted">(</span>
-            <span className="text-[#98c379]">
-              &quot;{'{'}:#?{'}'}&quot;
-            </span>
-            <span className="text-text-muted">, </span>
-            <span className="text-[#61afef]">word_count</span>
-            <span className="text-text-muted">(</span>
-            <span className="text-text-primary">text</span>
-            <span className="text-text-muted">));</span>
-            <br />
-            <span className="text-text-muted">{'}'}</span>
-            <br />
-            <div className="text-primary mt-4">$ cargo run</div>
-            <div className="text-green">
-              ✓ Compiling rustgym_task v0.1.0
-              <br />✓ Finished &amp; running in 0.3s
-            </div>
-            <div className="text-green mt-1">🎉 Task Complete! +150 XP earned</div>
-          </div>
+          <pre className="p-6 font-code text-[13.5px] leading-[1.8] overflow-x-auto">
+            <code>
+              <span className="text-[#5a6a6a]">// Quest 3 • Ownership &amp; Borrowing</span>
+              {'\n'}
+              <span className="text-[#5a6a6a]">// Task: Implement a safe string processor</span>
+              {'\n\n'}
+              <span className="text-[#c678dd]">use</span>{' '}
+              <span className="text-[#e5c07b]">std</span>
+              <span className="text-text-muted">::</span>
+              <span className="text-[#e5c07b]">collections</span>
+              <span className="text-text-muted">::</span>
+              <span className="text-[#e5c07b]">HashMap</span>
+              <span className="text-text-muted">;</span>
+              {'\n\n'}
+              <span className="text-[#c678dd]">fn</span>{' '}
+              <span className="text-[#61afef]">word_count</span>
+              <span className="text-text-muted">{'<'}</span>
+              <span className="text-primary-light">{`'a`}</span>
+              <span className="text-text-muted">{'>'}</span>
+              <span className="text-text-muted">(</span>
+              {'\n'}
+              {'    '}
+              <span className="text-text-primary">text</span>
+              <span className="text-text-muted">{`: &`}</span>
+              <span className="text-primary-light">{`'a`}</span>{' '}
+              <span className="text-[#e5c07b]">str</span>
+              {'\n'}
+              <span className="text-text-muted">{`) -> `}</span>
+              <span className="text-[#e5c07b]">HashMap</span>
+              <span className="text-text-muted">{`<&`}</span>
+              <span className="text-primary-light">{`'a`}</span>{' '}
+              <span className="text-[#e5c07b]">str</span>
+              <span className="text-text-muted">{`, `}</span>
+              <span className="text-[#e5c07b]">usize</span>
+              <span className="text-text-muted">{`> {`}</span>
+              {'\n'}
+              {'    '}
+              <span className="text-[#c678dd]">let mut</span>{' '}
+              <span className="text-text-primary">map</span>{' '}
+              <span className="text-text-muted">= </span>
+              <span className="text-[#e5c07b]">HashMap</span>
+              <span className="text-text-muted">::</span>
+              <span className="text-[#61afef]">new</span>
+              <span className="text-text-muted">();</span>
+              {'\n'}
+              {'    '}
+              <span className="text-[#c678dd]">for</span>{' '}
+              <span className="text-text-primary">word</span>{' '}
+              <span className="text-[#c678dd]">in</span>{' '}
+              <span className="text-text-primary">text</span>
+              <span className="text-text-muted">.</span>
+              <span className="text-[#61afef]">split_whitespace</span>
+              <span className="text-text-muted">{`() {`}</span>
+              {'\n'}
+              {'        '}
+              <span className="text-[#c678dd]">let</span>{' '}
+              <span className="text-text-primary">count</span>{' '}
+              <span className="text-text-muted">= </span>
+              <span className="text-text-primary">map</span>
+              <span className="text-text-muted">.</span>
+              <span className="text-[#61afef]">entry</span>
+              <span className="text-text-muted">(</span>
+              <span className="text-text-primary">word</span>
+              <span className="text-text-muted">).</span>
+              <span className="text-[#61afef]">or_insert</span>
+              <span className="text-text-muted">(</span>
+              <span className="text-[#d19a66]">0</span>
+              <span className="text-text-muted">);</span>
+              {'\n'}
+              {'        '}
+              <span className="text-text-muted">*</span>
+              <span className="text-text-primary">count</span>{' '}
+              <span className="text-text-muted">+= </span>
+              <span className="text-[#d19a66]">1</span>
+              <span className="text-text-muted">;</span>
+              {'\n'}
+              {'    '}
+              <span className="text-text-muted">{'}'}</span>
+              {'\n'}
+              {'    '}
+              <span className="text-text-primary">map</span>
+              {'\n'}
+              <span className="text-text-muted">{'}'}</span>
+              {'\n\n'}
+              <span className="text-primary">$ cargo run</span>
+              {'\n'}
+              <span className="text-green">✓ Compiling rustgym_task v0.1.0</span>
+              {'\n'}
+              <span className="text-green">✓ Finished &amp; running in 0.3s</span>
+              {'\n'}
+              <span className="text-green">🎉 Task Complete! +150 XP earned</span>
+            </code>
+          </pre>
         </div>
       </div>
     </section>

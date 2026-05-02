@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { FadeIn } from '../Landing';
 
 const eduStats = [
@@ -35,12 +36,12 @@ export default function EduSection() {
               </div>
             </div>
             <div>
-              <a
-                href="#"
+              <Link
+                to="/register"
                 className="inline-block bg-primary border-2 border-primary text-white px-8 py-3.5 rounded-[10px] text-[15px] font-semibold whitespace-nowrap transition-all hover:bg-primary-light hover:border-primary-light"
               >
                 Apply for EDU Access →
-              </a>
+              </Link>
             </div>
           </div>
         </FadeIn>

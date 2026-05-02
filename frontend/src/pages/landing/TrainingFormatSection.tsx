@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { FadeIn } from '../Landing';
 
 const selfPacedFeatures = [
@@ -49,12 +50,12 @@ export default function TrainingFormatSection() {
                   </li>
                 ))}
               </ul>
-              <a
-                href="#"
+              <Link
+                to="/register"
                 className="inline-block px-6 py-3 rounded-[10px] text-sm font-semibold border-2 border-border-light text-text-primary transition-all hover:border-primary hover:text-primary"
               >
                 Start for Free
-              </a>
+              </Link>
             </div>
 
             {/* Live Mentorship */}
@@ -75,12 +76,12 @@ export default function TrainingFormatSection() {
                   </li>
                 ))}
               </ul>
-              <a
-                href="#"
+              <Link
+                to="/register"
                 className="inline-block px-6 py-3 rounded-[10px] text-sm font-semibold bg-primary border-2 border-primary text-white transition-all hover:bg-primary-light hover:border-primary-light"
               >
                 Learn More
-              </a>
+              </Link>
             </div>
           </div>
         </FadeIn>

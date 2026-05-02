@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function FinalCTA() {
   return (
     <div className="py-[120px] px-5 md:px-10 text-center relative overflow-hidden bg-dark-950">
@@ -16,18 +18,18 @@ export default function FinalCTA() {
         No setup. No friction. Just you, the borrow checker, and a great adventure.
       </p>
       <div className="flex justify-center gap-4 relative flex-wrap">
-        <a
-          href="#"
+        <Link
+          to="/register"
           className="bg-primary text-white px-9 py-4 rounded-xl text-base font-semibold transition-all hover:bg-primary-light hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(206,66,43,0.35)] inline-flex items-center gap-2"
         >
           🦀 Join RustGym for Free
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          to="/quests"
           className="text-text-secondary text-[15px] font-medium inline-flex items-center gap-1.5 transition-colors hover:text-text-primary"
         >
           View curriculum →
-        </a>
+        </Link>
       </div>
     </div>
   );
