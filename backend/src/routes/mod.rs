@@ -1,5 +1,6 @@
 pub mod auth;
 pub mod quests;
+pub mod submissions;
 pub mod tasks;
 pub mod users;
 
@@ -14,4 +15,5 @@ pub fn api_router(state: &AppState) -> Router<AppState> {
         .nest("/api/v1/users", users::router(state.clone()))
         .nest("/api/v1/quests", quests::router())
         .nest("/api/v1/tasks", tasks::router(state.clone()))
+        .nest("/api/v1/submissions", submissions::router(state.clone()))
 }

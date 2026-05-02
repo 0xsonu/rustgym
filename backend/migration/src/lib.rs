@@ -6,6 +6,7 @@ mod m20240101_000003_create_quests_table;
 mod m20240101_000004_create_levels_table;
 mod m20240101_000005_create_tasks_table;
 mod m20240101_000006_create_progress_tables;
+mod m20240101_000007_create_submissions_table;
 
 pub struct Migrator;
 
@@ -19,6 +20,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240101_000004_create_levels_table::Migration),
             Box::new(m20240101_000005_create_tasks_table::Migration),
             Box::new(m20240101_000006_create_progress_tables::Migration),
+            Box::new(m20240101_000007_create_submissions_table::Migration),
         ]
     }
 }
