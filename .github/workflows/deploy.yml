@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------
+      # Deployment placeholder
+      # Replace the echo below with your actual deployment steps.
+      #
+      # Examples of what you might add here:
+      #   - Build and push Docker images to a container registry
+      #   - Deploy to a cloud provider (AWS ECS, GCP Cloud Run, etc.)
+      #   - Run database migrations
+      #   - Invalidate CDN caches
+      #   - Notify monitoring/alerting systems
+      #
+      # You may also want to add:
+      #   - Environment secrets (via GitHub Secrets)
+      #   - Deployment gates or manual approval steps
+      #   - Smoke tests after deployment
+      # ---------------------------------------------------------------
+      - name: Deploy
+        run: echo "Deployment placeholder - configure for your infrastructure"
