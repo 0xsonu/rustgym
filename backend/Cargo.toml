@@ -3,6 +3,14 @@ name = "rustgym-backend"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "rustgym-backend"
+path = "src/main.rs"
+
+[[bin]]
+name = "seed"
+path = "src/bin/seed.rs"
+
 [workspace]
 members = ["migration", "entity"]
 

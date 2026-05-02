@@ -1,0 +1,547 @@
+{
+  "quests": [
+    {
+      "slug": "rust-foundations",
+      "title": "Rust Foundations",
+      "description": "Master the fundamentals of Rust: variables, types, functions, control flow, loops, arrays, tuples, and strings.",
+      "order_index": 1,
+      "icon": "foundation",
+      "color": "#CE422B",
+      "prerequisite_quest_slug": null,
+      "levels": [
+        {
+          "slug": "variables-and-types",
+          "title": "Variables & Types",
+          "description": "Learn about variable bindings, mutability, and primitive types.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "numbers-and-math",
+          "title": "Numbers & Math",
+          "description": "Work with integers, floats, and arithmetic operations.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "booleans-and-comparison",
+          "title": "Booleans & Comparison",
+          "description": "Explore boolean logic and comparison operators.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "functions-basics",
+          "title": "Functions Basics",
+          "description": "Define and call functions with parameters and return values.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "control-flow-if",
+          "title": "Control Flow: If/Else",
+          "description": "Use if/else expressions for conditional logic.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "loops-and-iteration",
+          "title": "Loops & Iteration",
+          "description": "Master loop, while, and for loops.",
+          "order_index": 6,
+          "tasks": []
+        },
+        {
+          "slug": "arrays-and-slices",
+          "title": "Arrays & Slices",
+          "description": "Work with fixed-size arrays and slice references.",
+          "order_index": 7,
+          "tasks": []
+        },
+        {
+          "slug": "tuples",
+          "title": "Tuples",
+          "description": "Group multiple values with tuples and destructuring.",
+          "order_index": 8,
+          "tasks": []
+        },
+        {
+          "slug": "strings-basics",
+          "title": "Strings Basics",
+          "description": "Understand String vs &str and basic string operations.",
+          "order_index": 9,
+          "tasks": []
+        },
+        {
+          "slug": "type-conversions",
+          "title": "Type Conversions",
+          "description": "Convert between types using as, From, and Into.",
+          "order_index": 10,
+          "tasks": []
+        },
+        {
+          "slug": "constants-and-statics",
+          "title": "Constants & Statics",
+          "description": "Use const and static for compile-time and global values.",
+          "order_index": 11,
+          "tasks": []
+        },
+        {
+          "slug": "foundations-capstone",
+          "title": "Foundations Capstone",
+          "description": "Combine all foundational concepts in a mini-project.",
+          "order_index": 12,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "ownership-borrowing",
+      "title": "Ownership & Borrowing",
+      "description": "Understand Rust's ownership system: move semantics, references, mutable borrows, slices, and lifetimes.",
+      "order_index": 2,
+      "icon": "lock",
+      "color": "#E8A838",
+      "prerequisite_quest_slug": "rust-foundations",
+      "levels": [
+        {
+          "slug": "ownership-rules",
+          "title": "Ownership Rules",
+          "description": "Learn the three rules of ownership in Rust.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "move-semantics",
+          "title": "Move Semantics",
+          "description": "Understand how values move between variables.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "copy-and-clone",
+          "title": "Copy & Clone",
+          "description": "Learn when types are copied vs moved.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "references-and-borrowing",
+          "title": "References & Borrowing",
+          "description": "Borrow values with immutable references.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "mutable-references",
+          "title": "Mutable References",
+          "description": "Modify borrowed values with &mut.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "slice-types",
+          "title": "Slice Types",
+          "description": "Work with string slices and array slices.",
+          "order_index": 6,
+          "tasks": []
+        },
+        {
+          "slug": "lifetime-basics",
+          "title": "Lifetime Basics",
+          "description": "Understand lifetime annotations and their purpose.",
+          "order_index": 7,
+          "tasks": []
+        },
+        {
+          "slug": "lifetime-elision",
+          "title": "Lifetime Elision",
+          "description": "Learn when the compiler infers lifetimes automatically.",
+          "order_index": 8,
+          "tasks": []
+        },
+        {
+          "slug": "ownership-patterns",
+          "title": "Ownership Patterns",
+          "description": "Common patterns for working with ownership in real code.",
+          "order_index": 9,
+          "tasks": []
+        },
+        {
+          "slug": "ownership-capstone",
+          "title": "Ownership Capstone",
+          "description": "Apply ownership concepts in a comprehensive challenge.",
+          "order_index": 10,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "structs-enums",
+      "title": "Structs & Enums",
+      "description": "Define custom types with structs and enums, implement methods, and master pattern matching.",
+      "order_index": 3,
+      "icon": "cube",
+      "color": "#4CAF50",
+      "prerequisite_quest_slug": "ownership-borrowing",
+      "levels": [
+        {
+          "slug": "struct-definition",
+          "title": "Struct Definition",
+          "description": "Define and instantiate structs with named fields.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "methods-and-impl",
+          "title": "Methods & Impl",
+          "description": "Add behavior to structs with impl blocks.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "tuple-structs-and-unit",
+          "title": "Tuple Structs & Unit Structs",
+          "description": "Use tuple structs and unit-like structs.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "enum-basics",
+          "title": "Enum Basics",
+          "description": "Define enums with variants and associated data.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "pattern-matching",
+          "title": "Pattern Matching",
+          "description": "Use match expressions for exhaustive pattern matching.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "option-type",
+          "title": "Option Type",
+          "description": "Handle nullable values with Option<T>.",
+          "order_index": 6,
+          "tasks": []
+        },
+        {
+          "slug": "if-let-and-while-let",
+          "title": "If Let & While Let",
+          "description": "Use concise pattern matching with if let and while let.",
+          "order_index": 7,
+          "tasks": []
+        },
+        {
+          "slug": "structs-enums-capstone",
+          "title": "Structs & Enums Capstone",
+          "description": "Build a complete type system for a real-world domain.",
+          "order_index": 8,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "traits-generics",
+      "title": "Traits & Generics",
+      "description": "Master trait definitions, implementations, generics, where clauses, trait objects, and key standard library traits.",
+      "order_index": 4,
+      "icon": "puzzle",
+      "color": "#2196F3",
+      "prerequisite_quest_slug": "structs-enums",
+      "levels": [
+        {
+          "slug": "trait-definition",
+          "title": "Trait Definition",
+          "description": "Define traits with required and default methods.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "implementing-traits",
+          "title": "Implementing Traits",
+          "description": "Implement traits for your custom types.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "derive-macros",
+          "title": "Derive Macros",
+          "description": "Use #[derive] for common trait implementations.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "generics-basics",
+          "title": "Generics Basics",
+          "description": "Write generic functions and structs.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "trait-bounds",
+          "title": "Trait Bounds",
+          "description": "Constrain generics with trait bounds and where clauses.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "trait-objects",
+          "title": "Trait Objects",
+          "description": "Use dynamic dispatch with dyn Trait.",
+          "order_index": 6,
+          "tasks": []
+        },
+        {
+          "slug": "display-and-debug",
+          "title": "Display & Debug",
+          "description": "Implement Display and Debug for custom formatting.",
+          "order_index": 7,
+          "tasks": []
+        },
+        {
+          "slug": "from-and-into",
+          "title": "From & Into",
+          "description": "Implement type conversions with From and Into traits.",
+          "order_index": 8,
+          "tasks": []
+        },
+        {
+          "slug": "iterator-trait",
+          "title": "Iterator Trait",
+          "description": "Implement the Iterator trait for custom types.",
+          "order_index": 9,
+          "tasks": []
+        },
+        {
+          "slug": "traits-generics-capstone",
+          "title": "Traits & Generics Capstone",
+          "description": "Design a trait-based plugin system.",
+          "order_index": 10,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "error-handling",
+      "title": "Error Handling",
+      "description": "Handle errors gracefully with Result, Option, the ? operator, custom errors, and error propagation patterns.",
+      "order_index": 5,
+      "icon": "shield",
+      "color": "#9C27B0",
+      "prerequisite_quest_slug": "traits-generics",
+      "levels": [
+        {
+          "slug": "result-type",
+          "title": "Result Type",
+          "description": "Use Result<T, E> for recoverable errors.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "question-mark-operator",
+          "title": "The ? Operator",
+          "description": "Propagate errors concisely with the ? operator.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "custom-error-types",
+          "title": "Custom Error Types",
+          "description": "Define your own error types with enums.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "error-conversion",
+          "title": "Error Conversion",
+          "description": "Convert between error types with From and Into.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "thiserror-crate",
+          "title": "thiserror Crate",
+          "description": "Use thiserror for ergonomic error definitions.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "anyhow-crate",
+          "title": "anyhow Crate",
+          "description": "Use anyhow for application-level error handling.",
+          "order_index": 6,
+          "tasks": []
+        },
+        {
+          "slug": "error-propagation-patterns",
+          "title": "Error Propagation Patterns",
+          "description": "Master patterns for propagating errors across layers.",
+          "order_index": 7,
+          "tasks": []
+        },
+        {
+          "slug": "error-handling-capstone",
+          "title": "Error Handling Capstone",
+          "description": "Build a robust error handling system for a CLI app.",
+          "order_index": 8,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "collections-iterators",
+      "title": "Collections & Iterators",
+      "description": "Work with Vec, HashMap, HashSet, BTreeMap, iterator adapters, closures, and functional programming patterns.",
+      "order_index": 6,
+      "icon": "layers",
+      "color": "#FF9800",
+      "prerequisite_quest_slug": "error-handling",
+      "levels": [
+        {
+          "slug": "vectors",
+          "title": "Vectors",
+          "description": "Use Vec<T> for dynamic arrays.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "hashmaps",
+          "title": "HashMaps",
+          "description": "Store key-value pairs with HashMap.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "hashsets-and-btrees",
+          "title": "HashSets & BTrees",
+          "description": "Use HashSet and BTreeMap for specialized collections.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "closures",
+          "title": "Closures",
+          "description": "Write and use closures for inline functions.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "iterator-adapters",
+          "title": "Iterator Adapters",
+          "description": "Chain map, filter, fold, and other adapters.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "functional-patterns",
+          "title": "Functional Patterns",
+          "description": "Apply functional programming idioms in Rust.",
+          "order_index": 6,
+          "tasks": []
+        },
+        {
+          "slug": "collections-capstone",
+          "title": "Collections Capstone",
+          "description": "Build a data processing pipeline with iterators.",
+          "order_index": 7,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "async-concurrency",
+      "title": "Async & Concurrency",
+      "description": "Master async/await, Tokio runtime, futures, channels, Mutex, Arc, Send/Sync, and task spawning.",
+      "order_index": 7,
+      "icon": "zap",
+      "color": "#00BCD4",
+      "prerequisite_quest_slug": "collections-iterators",
+      "levels": [
+        {
+          "slug": "async-await-basics",
+          "title": "Async/Await Basics",
+          "description": "Write your first async functions with async/await.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "tokio-runtime",
+          "title": "Tokio Runtime",
+          "description": "Use the Tokio runtime for async execution.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "futures-and-streams",
+          "title": "Futures & Streams",
+          "description": "Work with futures and async streams.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "channels",
+          "title": "Channels",
+          "description": "Communicate between tasks with mpsc and oneshot channels.",
+          "order_index": 4,
+          "tasks": []
+        },
+        {
+          "slug": "shared-state",
+          "title": "Shared State",
+          "description": "Share state safely with Arc and Mutex.",
+          "order_index": 5,
+          "tasks": []
+        },
+        {
+          "slug": "async-capstone",
+          "title": "Async Capstone",
+          "description": "Build a concurrent web scraper or chat server.",
+          "order_index": 6,
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "slug": "systems-advanced",
+      "title": "Systems & Advanced",
+      "description": "Explore unsafe Rust, raw pointers, FFI, macros, procedural macros, WASM, and mini-projects.",
+      "order_index": 8,
+      "icon": "cpu",
+      "color": "#607D8B",
+      "prerequisite_quest_slug": "async-concurrency",
+      "levels": [
+        {
+          "slug": "unsafe-rust",
+          "title": "Unsafe Rust",
+          "description": "Use unsafe blocks and raw pointers responsibly.",
+          "order_index": 1,
+          "tasks": []
+        },
+        {
+          "slug": "macros",
+          "title": "Macros",
+          "description": "Write declarative macros with macro_rules!.",
+          "order_index": 2,
+          "tasks": []
+        },
+        {
+          "slug": "ffi-and-wasm",
+          "title": "FFI & WASM",
+          "description": "Interface with C code and compile to WebAssembly.",
+          "order_index": 3,
+          "tasks": []
+        },
+        {
+          "slug": "advanced-capstone",
+          "title": "Advanced Capstone",
+          "description": "Build a complete systems project combining all concepts.",
+          "order_index": 4,
+          "tasks": []
+        }
+      ]
+    }
+  ]
+}
