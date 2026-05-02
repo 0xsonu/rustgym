@@ -6,6 +6,9 @@ import type {
   Task,
   RunResponse,
   SubmitResponse,
+  Achievement,
+  LeaderboardResponse,
+  DashboardData,
 } from '@/types';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
@@ -154,5 +157,30 @@ export const taskApi = {
       method: 'POST',
       body: JSON.stringify({ code }),
     });
+  },
+};
+
+// Achievements API
+export const achievementApi = {
+  list() {
+    return request<Achievement[]>('/achievements');
+  },
+
+  getUserAchievements() {
+    return request<Achievement[]>('/users/me/achievements');
+  },
+};
+
+// Leaderboard API
+export const leaderboardApi = {
+  get(period: 'alltime' | 'weekly' | 'monthly' = 'alltime') {
+    return request<LeaderboardResponse>(`/users/leaderboard?period=${period}`);
+  },
+};
+
+// Dashboard API
+export const dashboardApi = {
+  get() {
+    return request<DashboardData>('/users/me/dashboard');
   },
 };

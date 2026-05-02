@@ -7,6 +7,8 @@ import Quests from '@/pages/Quests';
 import QuestDetail from '@/pages/QuestDetail';
 import LevelDetail from '@/pages/LevelDetail';
 import TaskSolver from '@/pages/TaskSolver';
+import Dashboard from '@/pages/Dashboard';
+import Leaderboard from '@/pages/Leaderboard';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +31,8 @@ function App() {
           <Route path="/quests/:slug" element={<QuestDetail />} />
           <Route path="/quests/:questSlug/levels/:levelSlug" element={<LevelDetail />} />
           <Route path="/tasks/:slug" element={<TaskSolver />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

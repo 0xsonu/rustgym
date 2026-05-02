@@ -130,3 +130,49 @@ export interface RunResponse {
   stderr: string;
   duration_ms: number;
 }
+
+// Achievement types
+export interface Achievement {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  icon: string;
+  xp_reward: number;
+  condition_type: string;
+  condition_value: number;
+  earned_at: string | null;
+}
+
+// Leaderboard types
+export interface LeaderboardEntry {
+  rank: number;
+  user_id: string;
+  username: string;
+  avatar_url: string | null;
+  level: number;
+  xp: number;
+}
+
+export interface LeaderboardResponse {
+  entries: LeaderboardEntry[];
+  user_rank: LeaderboardEntry | null;
+}
+
+// Dashboard types
+export interface RecentSubmission {
+  id: string;
+  task_id: string;
+  task_slug: string;
+  task_title: string;
+  status: 'passed' | 'failed' | 'error' | 'timeout';
+  created_at: string;
+}
+
+export interface DashboardData {
+  user: UserProfile;
+  recent_submissions: RecentSubmission[];
+  recent_achievements: Achievement[];
+  active_quest: Quest | null;
+  leaderboard_rank: number | null;
+}
