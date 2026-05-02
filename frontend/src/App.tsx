@@ -9,6 +9,11 @@ import LevelDetail from '@/pages/LevelDetail';
 import TaskSolver from '@/pages/TaskSolver';
 import Dashboard from '@/pages/Dashboard';
 import Leaderboard from '@/pages/Leaderboard';
+import Forum from '@/pages/Forum';
+import ForumThread from '@/pages/ForumThread';
+import Articles from '@/pages/Articles';
+import ArticleDetail from '@/pages/ArticleDetail';
+import Profile from '@/pages/Profile';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +38,11 @@ function App() {
           <Route path="/tasks/:slug" element={<TaskSolver />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/posts/:id" element={<ForumThread />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:id" element={<ArticleDetail />} />
+          <Route path="/profile/:username" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

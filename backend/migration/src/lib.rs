@@ -10,6 +10,7 @@ mod m20240101_000007_create_submissions_table;
 mod m20240101_000008_create_achievements_table;
 mod m20240101_000009_create_user_achievements_table;
 mod m20240101_000010_seed_achievements;
+mod m20240101_000011_create_community_tables;
 
 pub struct Migrator;
 
@@ -27,6 +28,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240101_000008_create_achievements_table::Migration),
             Box::new(m20240101_000009_create_user_achievements_table::Migration),
             Box::new(m20240101_000010_seed_achievements::Migration),
+            Box::new(m20240101_000011_create_community_tables::Migration),
         ]
     }
 }

@@ -5,3 +5,8 @@ export { default as Quests } from './Quests';
 export { default as QuestDetail } from './QuestDetail';
 export { default as LevelDetail } from './LevelDetail';
 export { default as TaskSolver } from './TaskSolver';
+export { default as Forum } from './Forum';
+export { default as ForumThread } from './ForumThread';
+export { default as Articles } from './Articles';
+export { default as ArticleDetail } from './ArticleDetail';
+export { default as Profile } from './Profile';

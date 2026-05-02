@@ -159,6 +159,107 @@ export interface LeaderboardResponse {
   user_rank: LeaderboardEntry | null;
 }
 
+// Forum types
+export type ForumCategory = 'general' | 'task_help' | 'show_and_tell';
+
+export interface ForumPostSummary {
+  id: string;
+  user_id: string;
+  username: string;
+  title: string;
+  category: string;
+  votes: number;
+  views: number;
+  reply_count: number;
+  is_pinned: boolean;
+  task_id: string | null;
+  created_at: string;
+}
+
+export interface ForumPostListResponse {
+  posts: ForumPostSummary[];
+  page: number;
+  per_page: number;
+  total: number;
+}
+
+export interface ForumReply {
+  id: string;
+  user_id: string;
+  username: string;
+  body_md: string;
+  votes: number;
+  is_accepted: boolean;
+  created_at: string;
+}
+
+export interface ForumPostDetail {
+  id: string;
+  user_id: string;
+  username: string;
+  title: string;
+  body_md: string;
+  category: string;
+  votes: number;
+  views: number;
+  reply_count: number;
+  is_pinned: boolean;
+  task_id: string | null;
+  created_at: string;
+  updated_at: string;
+  replies: ForumReply[];
+}
+
+// Article types
+export interface ArticleSummary {
+  id: string;
+  author_id: string;
+  author_username: string;
+  title: string;
+  cover_image_url: string | null;
+  tags: string[];
+  views: number;
+  likes: number;
+  created_at: string;
+}
+
+export interface ArticleListResponse {
+  articles: ArticleSummary[];
+  page: number;
+  per_page: number;
+  total: number;
+}
+
+export interface ArticleDetail {
+  id: string;
+  author_id: string;
+  author_username: string;
+  title: string;
+  body_md: string;
+  cover_image_url: string | null;
+  tags: string[];
+  is_published: boolean;
+  views: number;
+  likes: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Review types
+export interface Review {
+  id: string;
+  user_id: string;
+  username: string;
+  rating: number;
+  body: string;
+  is_featured: boolean;
+  created_at: string;
+}
+
+export interface ReviewListResponse {
+  reviews: Review[];
+}
+
 // Dashboard types
 export interface RecentSubmission {
   id: string;

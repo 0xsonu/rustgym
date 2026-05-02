@@ -1,7 +1,10 @@
 pub mod achievements;
+pub mod articles;
 pub mod auth;
+pub mod forum;
 pub mod leaderboard;
 pub mod quests;
+pub mod reviews;
 pub mod submissions;
 pub mod tasks;
 pub mod users;
@@ -20,4 +23,7 @@ pub fn api_router(state: &AppState) -> Router<AppState> {
         .nest("/api/v1/quests", quests::router())
         .nest("/api/v1/tasks", tasks::router(state.clone()))
         .nest("/api/v1/submissions", submissions::router(state.clone()))
+        .nest("/api/v1/forum", forum::router(state.clone()))
+        .nest("/api/v1/articles", articles::router(state.clone()))
+        .nest("/api/v1/reviews", reviews::router(state.clone()))
 }
