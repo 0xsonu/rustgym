@@ -14,6 +14,13 @@ import ForumThread from '@/pages/ForumThread';
 import Articles from '@/pages/Articles';
 import ArticleDetail from '@/pages/ArticleDetail';
 import Profile from '@/pages/Profile';
+import {
+  AdminDashboard,
+  ChallengeEditor,
+  QuestManager,
+  UserManager,
+  SubmissionMonitor,
+} from '@/pages/admin';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +50,12 @@ function App() {
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:id" element={<ArticleDetail />} />
           <Route path="/profile/:username" element={<Profile />} />
+          {/* Admin routes */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/challenges" element={<ChallengeEditor />} />
+          <Route path="/admin/quests" element={<QuestManager />} />
+          <Route path="/admin/users" element={<UserManager />} />
+          <Route path="/admin/submissions" element={<SubmissionMonitor />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

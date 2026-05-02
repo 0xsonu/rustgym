@@ -1,4 +1,5 @@
 pub mod achievements;
+pub mod admin;
 pub mod articles;
 pub mod auth;
 pub mod forum;
@@ -26,4 +27,5 @@ pub fn api_router(state: &AppState) -> Router<AppState> {
         .nest("/api/v1/forum", forum::router(state.clone()))
         .nest("/api/v1/articles", articles::router(state.clone()))
         .nest("/api/v1/reviews", reviews::router(state.clone()))
+        .nest("/api/v1/admin", admin::router(state.clone()))
 }
