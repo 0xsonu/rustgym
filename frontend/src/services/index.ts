@@ -1,2 +1,2 @@
 // API service layer
-export { authApi, setTokens, getAccessToken } from './api';
+export { authApi, questApi, levelApi, taskApi, setTokens, getAccessToken } from './api';
