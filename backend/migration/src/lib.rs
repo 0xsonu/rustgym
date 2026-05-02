@@ -2,6 +2,10 @@ pub use sea_orm_migration::prelude::*;
 
 mod m20240101_000001_create_users_table;
 mod m20240101_000002_create_refresh_tokens_table;
+mod m20240101_000003_create_quests_table;
+mod m20240101_000004_create_levels_table;
+mod m20240101_000005_create_tasks_table;
+mod m20240101_000006_create_progress_tables;
 
 pub struct Migrator;
 
@@ -11,6 +15,10 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20240101_000001_create_users_table::Migration),
             Box::new(m20240101_000002_create_refresh_tokens_table::Migration),
+            Box::new(m20240101_000003_create_quests_table::Migration),
+            Box::new(m20240101_000004_create_levels_table::Migration),
+            Box::new(m20240101_000005_create_tasks_table::Migration),
+            Box::new(m20240101_000006_create_progress_tables::Migration),
         ]
     }
 }
