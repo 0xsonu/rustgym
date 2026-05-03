@@ -12,6 +12,7 @@ use crate::{
         QuestProgress, QuestSummary, TaskProgress, TaskSummary,
     },
     error::AppError,
+    middleware::auth::OptionalCurrentUser,
     AppState,
 };
 
@@ -27,7 +28,10 @@ pub fn router() -> Router<AppState> {
 
 // ─── GET /api/v1/quests ──────────────────────────────────────────────────────
 
-async fn list_quests(State(state): State<AppState>) -> Result<Json<QuestListResponse>, AppError> {
+async fn list_quests(
+    State(state): State<AppState>,
+    user: OptionalCurrentUser,
+) -> Result<Json<QuestListResponse>, AppError> {
     // Fetch all published quests ordered by order_index
     let all_quests = quests::Entity::find()
         .filter(quests::Column::IsPublished.eq(true))
@@ -35,7 +39,10 @@ async fn list_quests(State(state): State<AppState>) -> Result<Json<QuestListResp
         .all(&state.db)
         .await?;
 
-    let user_id: Option<Uuid> = None;
+    let user_id: Option<Uuid> = user
+        .0
+        .as_ref()
+        .and_then(|u| Uuid::parse_str(u.user_id()).ok());
 
     // Fetch user progress if authenticated
     let user_quest_progresses = if let Some(uid) = user_id {
@@ -110,6 +117,7 @@ async fn list_quests(State(state): State<AppState>) -> Result<Json<QuestListResp
 
 async fn get_quest_detail(
     State(state): State<AppState>,
+    user: OptionalCurrentUser,
     Path(slug): Path<String>,
 ) -> Result<Json<QuestDetailResponse>, AppError> {
     // Find quest by slug
@@ -119,7 +127,10 @@ async fn get_quest_detail(
         .await?
         .ok_or_else(|| AppError::NotFound("Quest not found".to_string()))?;
 
-    let user_id: Option<Uuid> = None;
+    let user_id: Option<Uuid> = user
+        .0
+        .as_ref()
+        .and_then(|u| Uuid::parse_str(u.user_id()).ok());
 
     // Fetch levels for this quest
     let quest_levels = levels::Entity::find()
@@ -216,6 +227,7 @@ async fn get_quest_detail(
 
 async fn get_level_detail(
     State(state): State<AppState>,
+    user: OptionalCurrentUser,
     Path((quest_slug, level_slug)): Path<(String, String)>,
 ) -> Result<Json<LevelDetailResponse>, AppError> {
     // Find quest by slug first
@@ -233,7 +245,10 @@ async fn get_level_detail(
         .await?
         .ok_or_else(|| AppError::NotFound("Level not found".to_string()))?;
 
-    let user_id: Option<Uuid> = None;
+    let user_id: Option<Uuid> = user
+        .0
+        .as_ref()
+        .and_then(|u| Uuid::parse_str(u.user_id()).ok());
 
     // Fetch tasks for this level
     let level_tasks = tasks::Entity::find()

@@ -2,7 +2,11 @@
 
 An interactive, gamified platform for learning Rust programming. RustGym features a quest-based curriculum with 500+ coding challenges, Docker-isolated code execution, gamification mechanics (XP, levels, streaks, achievements, leaderboards), community features, and a CLI tool for local development.
 
-> **Status**: All phases complete — Auth, Curriculum, Code Execution, Gamification, Community, Admin, CLI & Deployment.
+> **🚧 Development Status**: This project is actively in development and **not yet hosted**. The backend requires local setup (see below). Contributions, feedback, and discussions are welcome!
+
+> **🌐 Frontend Preview**: The UI is deployed at [https://rustgym.vercel.app/](https://rustgym.vercel.app/) (frontend only — requires a local backend to be fully functional).
+
+> **💬 Open for Contribution**: If you're interested in contributing, please open an issue or discussion. All skill levels welcome.
 
 ## Architecture
 
@@ -11,7 +15,7 @@ An interactive, gamified platform for learning Rust programming. RustGym feature
 | Frontend       | React 19 + TypeScript + Vite | 5173   | ✅     |
 | Backend API    | Rust / Axum 0.7              | 3000   | ✅     |
 | Runner Service | Rust / Axum + Docker         | 3001   | ✅     |
-| CLI Tool       | Rust / Clap 4                | —      | ✅     |
+| CLI Tool       | Rust / Ratatui TUI           | —      | ✅     |
 | Database       | PostgreSQL 16                | 5432   | ✅     |
 | Cache          | Redis 7                      | 6379   | ✅     |
 | Object Storage | MinIO (S3-compatible)        | 9000   | ✅     |
@@ -102,8 +106,18 @@ rustgym/
 │   ├── src/main.rs        # Axum server with /run/test and /run/playground
 │   ├── Dockerfile         # Multi-stage build with Docker CLI
 │   └── sandbox.Dockerfile # Isolated sandbox image
-├── cli/               # Command-line interface
-│   └── src/main.rs        # Clap-based CLI (login, list, download, submit)
+├── cli/               # Interactive TUI (Ratatui + crossterm)
+│   ├── src/
+│   │   ├── main.rs        # Entry point, terminal setup, event loop
+│   │   ├── app.rs         # App state machine, screen dispatch
+│   │   ├── action.rs      # Action enum (navigation, API, editor)
+│   │   ├── event.rs       # Event stream (keyboard, tick, API responses)
+│   │   ├── editor.rs      # Editor resolution and launch
+│   │   ├── config.rs      # Config file (~/.rustgym/config.toml)
+│   │   ├── api/           # HTTP client (auth, quests, tasks, submit)
+│   │   ├── screens/       # Screen handlers (login, quest list, detail, submit)
+│   │   └── widgets/       # Reusable TUI widgets (status bar, spinner, list)
+│   └── tests/             # Property-based tests (proptest)
 ├── challenges/        # Curriculum content
 │   └── manifest.json      # 8 quests, 65 levels definition
 ├── nginx/             # Reverse proxy configuration
@@ -123,40 +137,71 @@ rustgym/
 
 ## Getting Started
 
-### 1. Clone and configure
+### Quick Start (recommended)
+
+The `dev.sh` script handles everything — infrastructure, backend, runner, and frontend:
 
 ```bash
 git clone <repository-url>
 cd rustgym
 cp .env.example .env
+
+# Start all services with one command
+bash dev.sh
 ```
 
-### 2. Start infrastructure
+This will:
+
+1. Start Docker infrastructure (PostgreSQL, Redis, MinIO)
+2. Wait for databases to be ready
+3. Start the backend API (port 3000, auto-runs migrations)
+4. Start the runner service (port 3001, code execution sandbox)
+5. Start the frontend dev server (port 5173)
+
+Once running, open `http://localhost:5173` to see the app.
+
+### dev.sh Commands
 
 ```bash
+bash dev.sh          # Start everything
+bash dev.sh stop     # Stop all services
+bash dev.sh seed     # Seed curriculum data (quests, levels, tasks)
+bash dev.sh logs     # Tail backend logs
+```
+
+### Seed Curriculum Data
+
+After first startup, seed the database with quests and challenges:
+
+```bash
+bash dev.sh seed
+```
+
+### Using the CLI
+
+Once the backend is running locally:
+
+```bash
+cd cli
+cargo run -- --api-url http://localhost:3000
+```
+
+### Manual Setup (alternative)
+
+If you prefer to start services individually:
+
+```bash
+# 1. Start infrastructure
 docker compose up -d postgres redis minio
-```
 
-### 3. Run the backend
-
-```bash
+# 2. Run the backend (auto-runs migrations)
 cargo run --manifest-path backend/Cargo.toml
-```
 
-The backend auto-runs migrations on startup and serves at `http://localhost:3000`.
-
-### 4. Seed curriculum data
-
-```bash
+# 3. Seed curriculum data
 cargo run --manifest-path backend/Cargo.toml --bin seed
-```
 
-### 5. Start the frontend
-
-```bash
-cd frontend
-pnpm install
-pnpm dev
+# 4. Start the frontend
+cd frontend && pnpm install && pnpm dev
 ```
 
 Open `http://localhost:5173` — you'll see the landing page.
@@ -258,32 +303,23 @@ Open `http://localhost:5173` — you'll see the landing page.
 
 ## CLI Tool
 
-Install the CLI:
+The RustGym CLI is a full-screen interactive TUI for solving challenges from your terminal. See the [CLI README](cli/README.md) for full documentation.
+
+### Quick Start
 
 ```bash
 cd cli
 cargo install --path .
+rustgym
 ```
 
-### Commands
+### Highlights
 
-```bash
-# Authenticate
-rustgym login --email user@example.com --password mypassword
-
-# List challenges (with optional filters)
-rustgym list
-rustgym list --quest ownership-borrowing
-rustgym list --difficulty beginner
-rustgym list --status completed
-
-# Download a challenge to work on locally
-rustgym download clone-strings
-
-# Submit your solution
-rustgym submit clone-strings
-rustgym submit clone-strings --file ./my-solution.rs
-```
+- Vim-style navigation (j/k/Enter/b)
+- Persistent login sessions
+- Opens challenges in your editor (nvim/vim/vi/$EDITOR)
+- Submit solutions and see results inline
+- Progress tracking with XP display
 
 Configuration is stored in `~/.rustgym/config.toml`.
 
@@ -380,6 +416,7 @@ cd cli && cargo clippy -- -D warnings
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS 3, shadcn/ui, Zustand, TanStack Query v5, React Router, Framer Motion, Monaco Editor |
 | Backend  | Rust, Axum 0.7, SeaORM, Tokio, jsonwebtoken, Argon2, tower-http                                                               |
 | Runner   | Rust, Axum, Bollard (Docker API), syn (AST parsing)                                                                           |
+| CLI      | Rust, Ratatui, crossterm, Tokio, reqwest                                                                                      |
 | Database | PostgreSQL 16, Redis 7, MinIO                                                                                                 |
 | DevOps   | Docker Compose, GitHub Actions                                                                                                |
 

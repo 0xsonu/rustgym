@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 3d782f1c59c2b5bc82eaaa1f23030257299c18ebd1459769fdb61ec33001af00 # shrinks to quest_slug = "a0a", level_slugs = ["a0-", "a0-", "a0a", "a-0", "a0a", "aa0", "a0-", "aaa"], selected_idx_raw = 1
