@@ -9,7 +9,7 @@ const stats = [
 
 export default function StatsBanner() {
   return (
-    <div className="bg-primary-dark">
+    <div className="bg-primary-700">
       <div className="max-w-[1200px] mx-auto py-20 px-5 md:px-10">
         <FadeIn>
           <div className="grid grid-cols-2 lg:grid-cols-4">
@@ -18,10 +18,10 @@ export default function StatsBanner() {
                 key={s.label}
                 className={`text-center py-10 px-5 ${i < stats.length - 1 ? 'lg:border-r lg:border-white/10' : ''}`}
               >
-                <div className="font-display text-[56px] font-extrabold text-white leading-none mb-2">
+                <div className="font-display text-[56px] font-extrabold text-white leading-none mb-2 tabular-nums">
                   {s.num}
                 </div>
-                <div className="text-sm text-white/65 font-medium">{s.label}</div>
+                <div className="text-sm text-white/65 font-medium font-body">{s.label}</div>
               </div>
             ))}
           </div>

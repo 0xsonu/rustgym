@@ -43,6 +43,7 @@ pub struct QuestDetailResponse {
 #[derive(Debug, Serialize)]
 pub struct LevelSummary {
     pub id: Uuid,
+    pub quest_id: Uuid,
     pub slug: String,
     pub title: String,
     pub description: Option<String>,

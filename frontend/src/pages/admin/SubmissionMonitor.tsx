@@ -2,26 +2,17 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import { adminApi } from '@/services/adminApi';
+import { Button, Card, Badge } from '@/components/ui';
 import AdminLayout from './AdminLayout';
 
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    passed: 'bg-green/10 text-green border-green/20',
-    failed: 'bg-primary/10 text-primary border-primary/20',
-    error: 'bg-amber/10 text-amber border-amber/20',
-    timeout: 'bg-text-muted/10 text-text-muted border-text-muted/20',
-    pending: 'bg-blue-400/10 text-blue-400 border-blue-400/20',
-    running: 'bg-blue-400/10 text-blue-400 border-blue-400/20',
-  };
-
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${styles[status] ?? styles.error}`}
-    >
-      {status}
-    </span>
-  );
-}
+const statusVariantMap: Record<string, 'success' | 'error' | 'warning' | 'info' | 'default'> = {
+  passed: 'success',
+  failed: 'error',
+  error: 'warning',
+  timeout: 'default',
+  pending: 'info',
+  running: 'info',
+};
 
 export default function SubmissionMonitor() {
   const [page, setPage] = useState(1);
@@ -40,21 +31,18 @@ export default function SubmissionMonitor() {
       <div>
         <div className="flex items-center justify-between mb-6">
           <h1 className="font-display text-2xl font-bold text-text-primary">Submission Monitor</h1>
-          <button
-            onClick={() => void refetch()}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-text-secondary hover:text-text-primary bg-dark-card border border-border rounded-lg transition-colors"
-          >
+          <Button variant="secondary" size="sm" onClick={() => void refetch()}>
             <RefreshCw className="w-4 h-4" />
             Refresh
-          </button>
+          </Button>
         </div>
 
         {/* Submissions Table */}
-        <div className="bg-dark-card border border-border rounded-xl overflow-hidden">
+        <Card className="p-0 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-text-muted border-b border-border bg-dark-900/50">
+                <tr className="text-left text-xs text-text-muted border-b border-border bg-surface-base/50">
                   <th className="px-4 py-3 font-medium">ID</th>
                   <th className="px-4 py-3 font-medium">Status</th>
                   <th className="px-4 py-3 font-medium">Duration</th>
@@ -67,34 +55,51 @@ export default function SubmissionMonitor() {
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-sm text-text-muted">
+                    <td
+                      colSpan={7}
+                      className="px-4 py-8 text-center text-sm text-text-muted font-body"
+                    >
                       Loading...
                     </td>
                   </tr>
                 ) : data?.submissions.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-sm text-text-muted">
+                    <td
+                      colSpan={7}
+                      className="px-4 py-8 text-center text-sm text-text-muted font-body"
+                    >
                       No submissions yet
                     </td>
                   </tr>
                 ) : (
-                  data?.submissions.map((sub) => (
-                    <tr key={sub.id} className="border-b border-border/50 last:border-0">
+                  data?.submissions.map((sub, index) => (
+                    <tr
+                      key={sub.id}
+                      className={`border-b border-border/50 last:border-0 ${
+                        index % 2 === 1 ? 'bg-surface-base/30' : ''
+                      }`}
+                    >
                       <td className="px-4 py-3 text-xs text-text-muted font-code">
                         {sub.id.slice(0, 8)}...
                       </td>
                       <td className="px-4 py-3">
-                        <StatusBadge status={sub.status} />
+                        <Badge variant={statusVariantMap[sub.status] ?? 'default'}>
+                          {sub.status}
+                        </Badge>
                       </td>
-                      <td className="px-4 py-3 text-sm text-text-primary">{sub.duration_ms}ms</td>
-                      <td className="px-4 py-3 text-sm text-text-primary">
+                      <td className="px-4 py-3 text-sm text-text-primary font-body tabular-nums">
+                        {sub.duration_ms}ms
+                      </td>
+                      <td className="px-4 py-3 text-sm text-text-primary font-body tabular-nums">
                         {(sub.memory_kb / 1024).toFixed(1)}MB
                       </td>
-                      <td className="px-4 py-3 text-sm text-amber font-code">
+                      <td className="px-4 py-3 text-sm text-warning font-code tabular-nums">
                         {sub.xp_awarded > 0 ? `+${sub.xp_awarded}` : '—'}
                       </td>
-                      <td className="px-4 py-3 text-sm text-text-muted">#{sub.attempt_number}</td>
-                      <td className="px-4 py-3 text-xs text-text-muted">
+                      <td className="px-4 py-3 text-sm text-text-muted font-body">
+                        #{sub.attempt_number}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-text-muted font-body">
                         {new Date(sub.created_at).toLocaleString()}
                       </td>
                     </tr>
@@ -107,14 +112,14 @@ export default function SubmissionMonitor() {
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between px-4 py-3 border-t border-border">
-              <span className="text-xs text-text-muted">
+              <span className="text-xs text-text-muted font-body">
                 Page {page} of {totalPages} ({data?.total} submissions)
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="p-1.5 rounded text-text-muted hover:text-text-primary disabled:opacity-30 transition-colors"
+                  className="p-1.5 rounded text-text-muted hover:text-text-primary disabled:opacity-30 transition-colors duration-200 cursor-pointer"
                   aria-label="Previous page"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -122,7 +127,7 @@ export default function SubmissionMonitor() {
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="p-1.5 rounded text-text-muted hover:text-text-primary disabled:opacity-30 transition-colors"
+                  className="p-1.5 rounded text-text-muted hover:text-text-primary disabled:opacity-30 transition-colors duration-200 cursor-pointer"
                   aria-label="Next page"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -130,9 +135,9 @@ export default function SubmissionMonitor() {
               </div>
             </div>
           )}
-        </div>
+        </Card>
 
-        <p className="text-xs text-text-muted mt-3">Auto-refreshes every 10 seconds</p>
+        <p className="text-xs text-text-muted mt-3 font-body">Auto-refreshes every 10 seconds</p>
       </div>
     </AdminLayout>
   );

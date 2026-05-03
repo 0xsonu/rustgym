@@ -2,6 +2,7 @@ import type {
   AuthResponse,
   Quest,
   QuestDetail,
+  Level,
   LevelDetail,
   Task,
   RunResponse,
@@ -18,6 +19,7 @@ import type {
   ReviewListResponse,
   Review,
   UserProfile,
+  PublicProfile,
 } from '@/types';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
@@ -33,17 +35,25 @@ export function setTokens(access: string | null, refresh: string | null) {
 }
 
 export function getAccessToken() {
-  return accessToken;
+  return accessToken || localStorage.getItem('rustgym_access_token');
+}
+
+function getEffectiveTokens() {
+  const at = accessToken || localStorage.getItem('rustgym_access_token');
+  const rt = refreshToken || localStorage.getItem('rustgym_refresh_token');
+  return { accessToken: at, refreshToken: rt };
 }
 
 async function request<T>(path: string, options: RequestInit = {}, retry = true): Promise<T> {
+  const tokens = getEffectiveTokens();
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
   };
 
-  if (accessToken) {
-    headers['Authorization'] = `Bearer ${accessToken}`;
+  if (tokens.accessToken) {
+    headers['Authorization'] = `Bearer ${tokens.accessToken}`;
   }
 
   const response = await fetch(`${BASE_URL}${path}`, {
@@ -51,7 +61,7 @@ async function request<T>(path: string, options: RequestInit = {}, retry = true)
     headers,
   });
 
-  if (response.status === 401 && retry && refreshToken) {
+  if (response.status === 401 && retry && tokens.refreshToken) {
     const refreshed = await attemptRefresh();
     if (refreshed) {
       return request<T>(path, options, false);
@@ -74,22 +84,34 @@ async function attemptRefresh(): Promise<boolean> {
   isRefreshing = true;
   refreshPromise = (async () => {
     try {
+      const tokens = getEffectiveTokens();
+      if (!tokens.refreshToken) {
+        return false;
+      }
+
       const response = await fetch(`${BASE_URL}/auth/refresh`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        body: JSON.stringify({ refresh_token: tokens.refreshToken }),
       });
 
       if (!response.ok) {
         setTokens(null, null);
+        localStorage.removeItem('rustgym_access_token');
+        localStorage.removeItem('rustgym_refresh_token');
         return false;
       }
 
       const data = (await response.json()) as AuthResponse;
       setTokens(data.access_token, data.refresh_token);
+      // Persist to localStorage so page refreshes work
+      localStorage.setItem('rustgym_access_token', data.access_token);
+      localStorage.setItem('rustgym_refresh_token', data.refresh_token);
       return true;
     } catch {
       setTokens(null, null);
+      localStorage.removeItem('rustgym_access_token');
+      localStorage.removeItem('rustgym_refresh_token');
       return false;
     } finally {
       isRefreshing = false;
@@ -132,19 +154,29 @@ export const authApi = {
 
 // Quest API
 export const questApi = {
-  list() {
-    return request<Quest[]>('/quests');
+  async list() {
+    const resp = await request<{ quests: Quest[] }>('/quests');
+    return resp.quests;
   },
 
-  getBySlug(slug: string) {
-    return request<QuestDetail>(`/quests/${slug}`);
+  async getBySlug(slug: string) {
+    const resp = await request<{ quest: Quest; levels: Level[] }>(`/quests/${slug}`);
+    return { ...resp.quest, levels: resp.levels } as QuestDetail;
   },
 };
 
 // Level API
 export const levelApi = {
-  getBySlug(questSlug: string, levelSlug: string) {
-    return request<LevelDetail>(`/quests/${questSlug}/levels/${levelSlug}`);
+  async getBySlug(questSlug: string, levelSlug: string) {
+    const resp = await request<{ level: Level; tasks: Task[] }>(
+      `/quests/${questSlug}/levels/${levelSlug}`,
+    );
+    return {
+      ...resp.level,
+      tasks: resp.tasks,
+      quest_slug: questSlug,
+      quest_title: '',
+    } as LevelDetail;
   },
 };
 
@@ -175,8 +207,13 @@ export const achievementApi = {
     return request<Achievement[]>('/achievements');
   },
 
-  getUserAchievements() {
-    return request<Achievement[]>('/users/me/achievements');
+  async getUserAchievements() {
+    const resp = await request<{
+      achievements: Achievement[];
+      total_earned: number;
+      total_available: number;
+    }>('/users/me/achievements');
+    return resp.achievements;
   },
 };
 
@@ -298,7 +335,7 @@ export const reviewsApi = {
 // Profile API
 export const profileApi = {
   get(username: string) {
-    return request<UserProfile>(`/users/${username}`);
+    return request<PublicProfile>(`/users/${username}`);
   },
 
   updateMe(data: { username?: string; bio?: string }) {

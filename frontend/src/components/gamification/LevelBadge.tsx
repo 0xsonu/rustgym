@@ -1,3 +1,5 @@
+import { Star } from 'lucide-react';
+
 interface LevelBadgeProps {
   level: number;
   size?: 'sm' | 'md' | 'lg';
@@ -9,12 +11,23 @@ const sizeClasses = {
   lg: 'w-12 h-12 text-lg',
 };
 
+const iconSizes = {
+  sm: 8,
+  md: 10,
+  lg: 14,
+};
+
 export default function LevelBadge({ level, size = 'md' }: LevelBadgeProps) {
   return (
     <div
-      className={`${sizeClasses[size]} rounded-full bg-amber/20 border-2 border-amber/50 flex items-center justify-center font-bold text-amber`}
+      className={`${sizeClasses[size]} relative rounded-full bg-warning/20 border-2 border-warning/50 flex items-center justify-center font-bold text-warning`}
     >
-      {level}
+      <Star
+        size={iconSizes[size]}
+        className="absolute -top-1 -right-1 text-warning fill-warning"
+        aria-hidden="true"
+      />
+      <span>{level}</span>
     </div>
   );
 }

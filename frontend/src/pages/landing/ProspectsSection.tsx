@@ -1,17 +1,21 @@
+import { DollarSign, Heart, Globe } from 'lucide-react';
 import { FadeIn } from '../Landing';
 
 const prospects = [
   {
+    icon: DollarSign,
     num: '$140K',
     title: 'Average Rust Developer Salary (US)',
     desc: 'Rust engineers command some of the highest salaries in the industry — significantly above language averages. Companies pay for safety and performance expertise.',
   },
   {
+    icon: Heart,
     num: '9×',
     title: 'Most Loved Language in a Row',
     desc: 'Rust has topped the Stack Overflow Developer Survey\'s "most admired" list for 9 consecutive years. Developers who learn it, love it and keep using it.',
   },
   {
+    icon: Globe,
     num: '∞',
     title: 'Used Everywhere That Matters',
     desc: 'Linux kernel, Windows, Android, Firefox, Cloudflare, AWS, Discord, Dropbox, Meta — Rust is at the foundation of modern infrastructure. Learn it once, work anywhere.',
@@ -28,25 +32,33 @@ export default function ProspectsSection() {
         <h2 className="font-display text-[clamp(34px,4vw,52px)] font-extrabold leading-tight mb-4">
           Rust is a <span className="text-primary">career-defining</span> choice
         </h2>
-        <p className="text-[17px] text-text-secondary max-w-[580px] leading-relaxed">
+        <p className="text-[17px] text-text-secondary max-w-[580px] leading-relaxed font-body">
           The most loved language for 9 consecutive years. Growing demand, premium salaries, and
           used at the core of the internet.
         </p>
 
         <FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-            {prospects.map((p) => (
-              <div
-                key={p.title}
-                className="bg-dark-card border border-border rounded-2xl p-7 transition-all hover:border-border-light hover:-translate-y-[3px]"
-              >
-                <div className="font-display text-5xl font-extrabold text-primary leading-none mb-2">
-                  {p.num}
+            {prospects.map((p) => {
+              const Icon = p.icon;
+              return (
+                <div
+                  key={p.title}
+                  className="bg-surface-elevated border border-border rounded-2xl p-7 transition-all hover:border-border-light hover:-translate-y-[3px] cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-primary" aria-hidden="true" />
+                  </div>
+                  <div className="font-display text-5xl font-extrabold text-primary leading-none mb-2">
+                    {p.num}
+                  </div>
+                  <h4 className="text-base font-semibold mb-2">{p.title}</h4>
+                  <p className="text-[13px] text-text-secondary leading-relaxed font-body">
+                    {p.desc}
+                  </p>
                 </div>
-                <h4 className="text-base font-semibold mb-2">{p.title}</h4>
-                <p className="text-[13px] text-text-secondary leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </FadeIn>
       </div>

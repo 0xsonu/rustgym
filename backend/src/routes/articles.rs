@@ -26,12 +26,12 @@ use entity::{articles, users};
 pub fn router(state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/", post(create_article))
-        .route("/{id}", put(update_article))
+        .route("/:id", put(update_article))
         .route_layer(middleware::from_fn_with_state(state, auth_middleware));
 
     Router::new()
         .route("/", get(list_articles))
-        .route("/{id}", get(get_article))
+        .route("/:id", get(get_article))
         .merge(auth_routes)
 }
 

@@ -5,10 +5,12 @@ use axum::{
 };
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QueryOrder, QuerySelect};
 use serde::Deserialize;
+use uuid::Uuid;
 
 use crate::{
     dto::gamification::{LeaderboardEntry, LeaderboardResponse},
     error::AppError,
+    middleware::auth::OptionalCurrentUser,
     AppState,
 };
 
@@ -29,6 +31,7 @@ struct LeaderboardParams {
 async fn get_leaderboard(
     State(state): State<AppState>,
     Query(params): Query<LeaderboardParams>,
+    optional_user: OptionalCurrentUser,
 ) -> Result<Json<LeaderboardResponse>, AppError> {
     let period = params.period.unwrap_or_else(|| "alltime".to_string());
 
@@ -62,9 +65,21 @@ async fn get_leaderboard(
     // Query DB for leaderboard
     let entries = fetch_leaderboard_from_db(&state, &period).await?;
 
+    // Compute user_rank for authenticated users
+    let user_rank = if let OptionalCurrentUser(Some(ref current_user)) = optional_user {
+        if let Ok(user_id) = Uuid::parse_str(current_user.user_id()) {
+            entries.iter().find(|e| e.user_id == user_id).cloned()
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+
     let response = LeaderboardResponse {
         entries,
         period: period.clone(),
+        user_rank,
     };
 
     // Cache in Redis
@@ -122,6 +137,7 @@ async fn fetch_leaderboard_from_db(
         .enumerate()
         .map(|(idx, u)| LeaderboardEntry {
             rank: (idx + 1) as i64,
+            user_id: u.id,
             username: u.username,
             avatar_url: u.avatar_url,
             level: u.level,

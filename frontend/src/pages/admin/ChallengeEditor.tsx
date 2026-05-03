@@ -4,6 +4,7 @@ import { Plus, Pencil, Trash2, Save, X } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import { adminApi } from '@/services/adminApi';
 import type { AdminTask } from '@/types/admin';
+import { Button, Input, Card } from '@/components/ui';
 import AdminLayout from './AdminLayout';
 
 type EditingTask = Partial<AdminTask> & { isNew?: boolean };
@@ -76,29 +77,26 @@ export default function ChallengeEditor() {
       <div className="flex flex-col h-[calc(100vh-64px)]">
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-display text-2xl font-bold text-text-primary">Challenge Editor</h1>
-          <button
-            onClick={handleNew}
-            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-light transition-colors"
-          >
+          <Button onClick={handleNew} size="md">
             <Plus className="w-4 h-4" />
             New Task
-          </button>
+          </Button>
         </div>
 
         <div className="flex gap-4 flex-1 min-h-0">
           {/* Task List */}
-          <div className="w-72 shrink-0 bg-dark-card border border-border rounded-xl overflow-auto">
+          <Card className="w-72 shrink-0 p-0 overflow-auto">
             {isLoading ? (
-              <div className="p-4 text-sm text-text-muted">Loading...</div>
+              <div className="p-4 text-sm text-text-muted font-body">Loading...</div>
             ) : (
               <div className="p-2 space-y-1">
                 {tasks?.map((task) => (
                   <div
                     key={task.id}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors duration-200 ${
                       editing?.id === task.id
                         ? 'bg-primary/10 border border-primary/20'
-                        : 'hover:bg-dark-700'
+                        : 'hover:bg-surface-overlay'
                     }`}
                     onClick={() => {
                       setEditing({ ...task });
@@ -106,12 +104,12 @@ export default function ChallengeEditor() {
                     }}
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-text-primary truncate">{task.title}</p>
-                      <p className="text-[11px] text-text-muted">{task.difficulty}</p>
+                      <p className="text-sm text-text-primary truncate font-body">{task.title}</p>
+                      <p className="text-[11px] text-text-muted font-body">{task.difficulty}</p>
                     </div>
                     <div className="flex items-center gap-1 ml-2">
                       <span
-                        className={`w-2 h-2 rounded-full ${task.is_published ? 'bg-green' : 'bg-text-muted'}`}
+                        className={`w-2 h-2 rounded-full ${task.is_published ? 'bg-success' : 'bg-text-muted'}`}
                       />
                       <button
                         onClick={(e) => {
@@ -120,7 +118,7 @@ export default function ChallengeEditor() {
                             deleteMutation.mutate(task.id);
                           }
                         }}
-                        className="p-1 text-text-muted hover:text-red-400 transition-colors"
+                        className="p-1 text-text-muted hover:text-error transition-colors duration-200 cursor-pointer"
                         aria-label="Delete task"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -130,34 +128,32 @@ export default function ChallengeEditor() {
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Editor Panel */}
           {editing ? (
-            <div className="flex-1 bg-dark-card border border-border rounded-xl flex flex-col min-h-0">
+            <Card className="flex-1 p-0 flex flex-col min-h-0">
               {/* Task metadata */}
               <div className="p-4 border-b border-border space-y-3">
                 <div className="flex items-center gap-3">
-                  <input
-                    type="text"
+                  <Input
                     value={editing.title ?? ''}
                     onChange={(e) => setEditing({ ...editing, title: e.target.value })}
                     placeholder="Task title"
-                    className="flex-1 bg-dark-700 border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary"
+                    className="flex-1"
                   />
-                  <input
-                    type="text"
+                  <Input
                     value={editing.slug ?? ''}
                     onChange={(e) => setEditing({ ...editing, slug: e.target.value })}
                     placeholder="slug"
-                    className="w-48 bg-dark-700 border border-border rounded-lg px-3 py-2 text-sm text-text-primary font-code placeholder:text-text-muted focus:outline-none focus:border-primary"
+                    className="w-48 font-code"
                   />
                 </div>
                 <div className="flex items-center gap-3">
                   <select
                     value={editing.difficulty ?? 'easy'}
                     onChange={(e) => setEditing({ ...editing, difficulty: e.target.value })}
-                    className="bg-dark-700 border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary"
+                    className="h-10 bg-surface-base border border-border rounded-lg px-3 py-2 text-sm text-text-primary font-body focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   >
                     <option value="beginner">Beginner</option>
                     <option value="easy">Easy</option>
@@ -165,40 +161,38 @@ export default function ChallengeEditor() {
                     <option value="hard">Hard</option>
                     <option value="advanced">Advanced</option>
                   </select>
-                  <input
+                  <Input
                     type="number"
                     value={editing.xp_reward ?? 50}
                     onChange={(e) =>
                       setEditing({ ...editing, xp_reward: parseInt(e.target.value) || 0 })
                     }
                     placeholder="XP"
-                    className="w-24 bg-dark-700 border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary"
+                    className="w-24"
                   />
-                  <label className="flex items-center gap-2 text-sm text-text-secondary">
+                  <label className="flex items-center gap-2 text-sm text-text-secondary font-body">
                     <input
                       type="checkbox"
                       checked={editing.is_published ?? false}
                       onChange={(e) => setEditing({ ...editing, is_published: e.target.checked })}
-                      className="rounded"
+                      className="rounded border-border"
                     />
                     Published
                   </label>
                   <div className="ml-auto flex items-center gap-2">
-                    <button
-                      onClick={() => setEditing(null)}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm text-text-muted hover:text-text-primary transition-colors"
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => setEditing(null)}>
                       <X className="w-4 h-4" />
                       Cancel
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      size="sm"
                       onClick={handleSave}
                       disabled={createMutation.isPending || updateMutation.isPending}
-                      className="flex items-center gap-1 bg-primary text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-primary-light transition-colors disabled:opacity-50"
+                      isLoading={createMutation.isPending || updateMutation.isPending}
                     >
                       {editing.isNew ? <Plus className="w-4 h-4" /> : <Save className="w-4 h-4" />}
                       {editing.isNew ? 'Create' : 'Save'}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -216,7 +210,7 @@ export default function ChallengeEditor() {
                   <button
                     key={key}
                     onClick={() => setActiveTab(key)}
-                    className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 ${
+                    className={`px-4 py-2.5 text-sm font-medium transition-colors duration-200 border-b-2 cursor-pointer ${
                       activeTab === key
                         ? 'text-primary border-primary'
                         : 'text-text-muted border-transparent hover:text-text-primary'
@@ -246,14 +240,16 @@ export default function ChallengeEditor() {
                   }}
                 />
               </div>
-            </div>
+            </Card>
           ) : (
-            <div className="flex-1 bg-dark-card border border-border rounded-xl flex items-center justify-center">
+            <Card className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <Pencil className="w-8 h-8 text-text-muted mx-auto mb-3" />
-                <p className="text-sm text-text-muted">Select a task to edit or create a new one</p>
+                <p className="text-sm text-text-muted font-body">
+                  Select a task to edit or create a new one
+                </p>
               </div>
-            </div>
+            </Card>
           )}
         </div>
       </div>

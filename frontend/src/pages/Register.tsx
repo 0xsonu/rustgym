@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod/v4';
 import { Link, useNavigate } from 'react-router-dom';
+import { X, Bug } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import { Input, Button } from '@/components/ui';
 import type { ApiError } from '@/types';
 
 const registerSchema = z
@@ -35,6 +37,7 @@ export default function Register() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: 'onChange',
   });
 
   async function onSubmit(data: RegisterFormData) {
@@ -42,7 +45,7 @@ export default function Register() {
     setIsSubmitting(true);
     try {
       await registerAction(data.username, data.email, data.password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (error: unknown) {
       const apiErr = error as ApiError;
       setApiError(apiErr.message || 'Registration failed');
@@ -52,15 +55,15 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md mx-auto">
-        <div className="bg-dark-card border border-border rounded-2xl p-8">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-surface-base bg-[radial-gradient(ellipse_at_center,_rgba(206,66,43,0.06)_0%,_transparent_70%)]">
+      <div className="w-full max-w-[400px]">
+        <div className="bg-surface-elevated border border-border rounded-xl p-6 sm:p-8">
           <div className="text-center mb-8">
             <Link
               to="/"
               className="inline-flex items-center gap-2 font-display text-2xl font-extrabold tracking-wide text-text-primary mb-2"
             >
-              <span className="text-2xl">🦀</span>
+              <Bug className="h-6 w-6 text-primary" aria-hidden="true" />
               <span>
                 Rust<span className="text-primary">Gym</span>
               </span>
@@ -72,104 +75,66 @@ export default function Register() {
           </div>
 
           {apiError && (
-            <div className="bg-red-400/10 border border-red-400/30 rounded-lg px-4 py-3 mb-6">
-              <p className="text-red-400 text-sm">{apiError}</p>
+            <div className="flex items-start gap-3 bg-error/10 border border-error/30 rounded-lg px-4 py-3 mb-6">
+              <p className="text-error text-sm flex-1">{apiError}</p>
+              <button
+                type="button"
+                onClick={() => setApiError(null)}
+                className="text-error hover:text-error/80 transition-colors shrink-0 cursor-pointer"
+                aria-label="Dismiss error"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
             </div>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-text-secondary mb-1.5"
-              >
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                autoComplete="username"
-                {...register('username')}
-                className="w-full bg-dark-700 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none transition-colors"
-                placeholder="rustacean42"
-              />
-              {errors.username && (
-                <p className="text-red-400 text-sm mt-1">{errors.username.message}</p>
-              )}
-            </div>
+            <Input
+              label="Username"
+              type="text"
+              autoComplete="username"
+              placeholder="rustacean42"
+              error={errors.username?.message}
+              {...register('username')}
+            />
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-text-secondary mb-1.5"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                {...register('email')}
-                className="w-full bg-dark-700 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none transition-colors"
-                placeholder="you@example.com"
-              />
-              {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>}
-            </div>
+            <Input
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-text-secondary mb-1.5"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                autoComplete="new-password"
-                {...register('password')}
-                className="w-full bg-dark-700 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none transition-colors"
-                placeholder="••••••••"
-              />
-              {errors.password && (
-                <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
-              )}
-            </div>
+            <Input
+              label="Password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              {...register('password')}
+            />
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-text-secondary mb-1.5"
-              >
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                {...register('confirmPassword')}
-                className="w-full bg-dark-700 border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none transition-colors"
-                placeholder="••••••••"
-              />
-              {errors.confirmPassword && (
-                <p className="text-red-400 text-sm mt-1">{errors.confirmPassword.message}</p>
-              )}
-            </div>
+            <Input
+              label="Confirm Password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="••••••••"
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold text-sm tracking-wide transition-all hover:bg-primary-light disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <Button type="submit" className="w-full" size="lg" isLoading={isSubmitting}>
               {isSubmitting ? 'Creating account...' : 'Create Account'}
-            </button>
+            </Button>
           </form>
 
           <p className="text-center text-text-muted text-sm mt-6">
             Already have an account?{' '}
             <Link
               to="/login"
-              className="text-primary hover:text-primary-light transition-colors font-medium"
+              className="text-primary hover:text-primary-400 transition-colors font-medium"
             >
               Sign in
             </Link>

@@ -1,3 +1,4 @@
+import { Newspaper } from 'lucide-react';
 import { FadeIn } from '../Landing';
 
 const mediaOutlets = [
@@ -27,8 +28,9 @@ export default function MediaSection() {
             {mediaOutlets.map((name) => (
               <div
                 key={name}
-                className="bg-dark-card border border-border rounded-[10px] px-6 py-3 text-sm font-semibold text-text-secondary transition-all hover:text-text-primary hover:border-border-light"
+                className="bg-surface-elevated border border-border rounded-[10px] px-6 py-3 text-sm font-semibold text-text-secondary transition-all hover:text-text-primary hover:border-border-light inline-flex items-center gap-2 cursor-pointer"
               >
+                <Newspaper className="w-4 h-4 text-text-muted" aria-hidden="true" />
                 {name}
               </div>
             ))}

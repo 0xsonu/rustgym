@@ -25,9 +25,10 @@ pub struct AchievementsListResponse {
 
 // ─── Leaderboard ─────────────────────────────────────────────────────────────
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LeaderboardEntry {
     pub rank: i64,
+    pub user_id: Uuid,
     pub username: String,
     pub avatar_url: Option<String>,
     pub level: i32,
@@ -38,4 +39,5 @@ pub struct LeaderboardEntry {
 pub struct LeaderboardResponse {
     pub entries: Vec<LeaderboardEntry>,
     pub period: String,
+    pub user_rank: Option<LeaderboardEntry>,
 }

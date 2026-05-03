@@ -12,20 +12,19 @@ import ReviewsSection from './landing/ReviewsSection';
 import MediaSection from './landing/MediaSection';
 import EduSection from './landing/EduSection';
 import FinalCTA from './landing/FinalCTA';
+import { fadeInUp, reducedMotionFadeIn, useReducedMotion } from '@/lib/motion';
 
 function Divider() {
   return <hr className="border-t border-border m-0" />;
 }
 
-const fadeInVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' as const } },
-};
-
 export function FadeIn({ children, className }: { children: React.ReactNode; className?: string }) {
+  const prefersReducedMotion = useReducedMotion();
+  const variants = prefersReducedMotion ? reducedMotionFadeIn : fadeInUp;
+
   return (
     <motion.div
-      variants={fadeInVariants}
+      variants={variants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
@@ -38,7 +37,7 @@ export function FadeIn({ children, className }: { children: React.ReactNode; cla
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-dark-950 text-text-primary font-body">
+    <div className="min-h-screen bg-surface-base text-text-primary font-body">
       <Navbar />
       <HeroSection />
       <Divider />

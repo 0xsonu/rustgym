@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { Bug, Rocket, Star, Heart, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui';
 
 export default function HeroSection() {
   return (
@@ -19,39 +21,41 @@ export default function HeroSection() {
         {/* Left column */}
         <div>
           <div className="inline-flex items-center gap-2 bg-primary/[0.12] border border-primary/30 text-primary-light text-xs font-semibold px-3 py-1 rounded-full tracking-wider uppercase mb-5">
-            🦀 #1 Rust Learning Platform
+            <Bug className="w-3.5 h-3.5" aria-hidden="true" />
+            #1 Rust Learning Platform
           </div>
-          <h1 className="font-display text-[clamp(48px,6vw,76px)] font-extrabold leading-none tracking-tight mb-2">
+          <h1 className="font-display text-[clamp(32px,6vw,76px)] font-extrabold leading-none tracking-tight mb-2">
             Learn
             <br />
             <span className="text-primary">Rust</span> Online
             <br />
             <span className="text-amber">the Fun Way</span>
           </h1>
-          <p className="text-[17px] text-text-secondary max-w-[480px] mb-9 leading-relaxed">
+          <p className="text-[17px] text-text-secondary max-w-[480px] mb-9 leading-relaxed font-body">
             Master ownership, borrowing, lifetimes, and fearless concurrency through 1,400+ hands-on
             coding tasks. From &ldquo;Hello, world!&rdquo; to systems-level mastery — at your pace,
             with instant feedback.
           </p>
           <div className="flex items-center gap-4 mb-11 flex-wrap">
-            <Link
-              to="/register"
-              className="bg-primary text-white px-7 py-3.5 rounded-[10px] text-[15px] font-semibold transition-all hover:bg-primary-light hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(206,66,43,0.35)] inline-flex items-center gap-2"
-            >
-              🚀 Start Learning Free
-            </Link>
+            <Button asChild size="lg">
+              <Link to="/register">
+                <Rocket className="w-4 h-4" aria-hidden="true" />
+                Start Learning Free
+              </Link>
+            </Button>
             <Link
               to="/quests"
               className="text-text-secondary text-sm font-medium inline-flex items-center gap-1.5 transition-colors hover:text-text-primary"
             >
-              See the curriculum →
+              See the curriculum
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </div>
           <div className="flex items-center gap-5 flex-wrap">
-            <Badge score="4.9" source="G2 Rating" count="1,200+ reviews" />
-            <Badge score="4.8" source="Trustpilot" count="800+ reviews" />
-            <div className="flex items-center gap-2 bg-dark-800 border border-border rounded-lg px-3.5 py-2">
-              <div className="text-[22px] leading-none">🦀</div>
+            <HeroBadge score="4.9" source="G2 Rating" count="1,200+ reviews" />
+            <HeroBadge score="4.8" source="Trustpilot" count="800+ reviews" />
+            <div className="flex items-center gap-2 bg-surface-elevated border border-border rounded-lg px-3.5 py-2">
+              <Heart className="w-5 h-5 text-primary" aria-hidden="true" />
               <div>
                 <div className="text-xs font-semibold">Most Loved</div>
                 <div className="text-[11px] text-text-muted">9 years in a row</div>
@@ -61,8 +65,8 @@ export default function HeroSection() {
         </div>
 
         {/* Right column - Terminal */}
-        <div className="bg-dark-900 border border-border rounded-[14px] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.5)]">
-          <div className="bg-dark-800 px-4 py-3 flex items-center gap-2 border-b border-border">
+        <div className="bg-surface-base border border-border rounded-[14px] overflow-hidden shadow-lg">
+          <div className="bg-surface-elevated px-4 py-3 flex items-center gap-2 border-b border-border">
             <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
             <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
             <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
@@ -156,11 +160,11 @@ export default function HeroSection() {
               {'\n\n'}
               <span className="text-primary">$ cargo run</span>
               {'\n'}
-              <span className="text-green">✓ Compiling rustgym_task v0.1.0</span>
+              <span className="text-success">✓ Compiling rustgym_task v0.1.0</span>
               {'\n'}
-              <span className="text-green">✓ Finished &amp; running in 0.3s</span>
+              <span className="text-success">✓ Finished &amp; running in 0.3s</span>
               {'\n'}
-              <span className="text-green">🎉 Task Complete! +150 XP earned</span>
+              <span className="text-success">✓ Task Complete! +150 XP earned</span>
             </code>
           </pre>
         </div>
@@ -169,11 +173,15 @@ export default function HeroSection() {
   );
 }
 
-function Badge({ score, source, count }: { score: string; source: string; count: string }) {
+function HeroBadge({ score, source, count }: { score: string; source: string; count: string }) {
   return (
-    <div className="flex items-center gap-2 bg-dark-800 border border-border rounded-lg px-3.5 py-2">
+    <div className="flex items-center gap-2 bg-surface-elevated border border-border rounded-lg px-3.5 py-2">
       <div>
-        <div className="text-amber text-xs">★★★★★</div>
+        <div className="flex items-center gap-0.5 text-amber">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className="w-3 h-3 fill-current" aria-hidden="true" />
+          ))}
+        </div>
         <div className="text-base font-bold text-text-primary">{score}</div>
       </div>
       <div>

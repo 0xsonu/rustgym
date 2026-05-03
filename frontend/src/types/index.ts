@@ -14,6 +14,18 @@ export interface UserProfile {
   created_at: string;
 }
 
+export interface PublicProfile {
+  id: string;
+  username: string;
+  avatar_url: string | null;
+  bio: string | null;
+  role: 'student' | 'mentor' | 'admin';
+  xp: number;
+  level: number;
+  streak_days: number;
+  created_at: string;
+}
+
 export interface AuthResponse {
   access_token: string;
   refresh_token: string;
@@ -139,8 +151,7 @@ export interface Achievement {
   description: string;
   icon: string;
   xp_reward: number;
-  condition_type: string;
-  condition_value: number;
+  is_earned: boolean;
   earned_at: string | null;
 }
 

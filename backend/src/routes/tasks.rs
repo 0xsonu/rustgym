@@ -29,13 +29,13 @@ use entity::{submissions, tasks};
 /// Build the tasks router.
 pub fn router(state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
-        .route("/{slug}/submissions", get(get_task_submissions))
-        .route("/{slug}/submit", post(submit_task))
-        .route("/{slug}/run", post(run_playground))
+        .route("/:slug/submissions", get(get_task_submissions))
+        .route("/:slug/submit", post(submit_task))
+        .route("/:slug/run", post(run_playground))
         .route_layer(middleware::from_fn_with_state(state, auth_middleware));
 
     Router::new()
-        .route("/{slug}", get(get_task_detail))
+        .route("/:slug", get(get_task_detail))
         .merge(auth_routes)
 }
 

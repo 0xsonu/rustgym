@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, ChevronDown, ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronRight, Eye, EyeOff, Compass } from 'lucide-react';
 import { adminApi } from '@/services/adminApi';
 import type { AdminQuest, AdminLevel } from '@/types/admin';
+import { Button, Input, Card, Modal } from '@/components/ui';
 import AdminLayout from './AdminLayout';
 
 export default function QuestManager() {
@@ -10,6 +11,11 @@ export default function QuestManager() {
   const [expandedQuest, setExpandedQuest] = useState<string | null>(null);
   const [newQuestForm, setNewQuestForm] = useState(false);
   const [newLevelForm, setNewLevelForm] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: 'quest' | 'level';
+    id: string;
+    name: string;
+  } | null>(null);
 
   const { data: quests, isLoading: questsLoading } = useQuery({
     queryKey: ['admin', 'quests'],
@@ -41,6 +47,7 @@ export default function QuestManager() {
     mutationFn: (id: string) => adminApi.deleteQuest(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['admin', 'quests'] });
+      setDeleteTarget(null);
     },
   });
 
@@ -64,6 +71,7 @@ export default function QuestManager() {
     mutationFn: (id: string) => adminApi.deleteLevel(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['admin', 'levels'] });
+      setDeleteTarget(null);
     },
   });
 
@@ -73,18 +81,24 @@ export default function QuestManager() {
       .sort((a, b) => a.order_index - b.order_index);
   }
 
+  function handleConfirmDelete() {
+    if (!deleteTarget) return;
+    if (deleteTarget.type === 'quest') {
+      deleteQuestMutation.mutate(deleteTarget.id);
+    } else {
+      deleteLevelMutation.mutate(deleteTarget.id);
+    }
+  }
+
   return (
     <AdminLayout>
       <div>
         <div className="flex items-center justify-between mb-6">
           <h1 className="font-display text-2xl font-bold text-text-primary">Quest Manager</h1>
-          <button
-            onClick={() => setNewQuestForm(true)}
-            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-light transition-colors"
-          >
+          <Button onClick={() => setNewQuestForm(true)}>
             <Plus className="w-4 h-4" />
             New Quest
-          </button>
+          </Button>
         </div>
 
         {/* New Quest Form */}
@@ -98,7 +112,7 @@ export default function QuestManager() {
 
         {/* Quest List */}
         {questsLoading ? (
-          <div className="text-sm text-text-muted">Loading...</div>
+          <div className="text-sm text-text-muted font-body">Loading...</div>
         ) : (
           <div className="space-y-3">
             {quests?.map((quest) => {
@@ -106,15 +120,12 @@ export default function QuestManager() {
               const questLevels = getLevelsForQuest(quest.id);
 
               return (
-                <div
-                  key={quest.id}
-                  className="bg-dark-card border border-border rounded-xl overflow-hidden"
-                >
+                <Card key={quest.id} className="p-0 overflow-hidden">
                   {/* Quest Header */}
                   <div className="flex items-center gap-3 p-4">
                     <button
                       onClick={() => setExpandedQuest(isExpanded ? null : quest.id)}
-                      className="text-text-muted hover:text-text-primary transition-colors"
+                      className="text-text-muted hover:text-text-primary transition-colors duration-200 cursor-pointer"
                       aria-label={isExpanded ? 'Collapse' : 'Expand'}
                     >
                       {isExpanded ? (
@@ -123,12 +134,18 @@ export default function QuestManager() {
                         <ChevronRight className="w-4 h-4" />
                       )}
                     </button>
-                    <span className="text-lg">{quest.icon || '📦'}</span>
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <Compass className="w-4 h-4 text-primary" />
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-text-primary">{quest.title}</p>
+                      <p className="text-sm font-medium text-text-primary font-body">
+                        {quest.title}
+                      </p>
                       <p className="text-[11px] text-text-muted font-code">{quest.slug}</p>
                     </div>
-                    <span className="text-xs text-text-muted">{questLevels.length} levels</span>
+                    <span className="text-xs text-text-muted font-body">
+                      {questLevels.length} levels
+                    </span>
                     <button
                       onClick={() =>
                         updateQuestMutation.mutate({
@@ -136,9 +153,9 @@ export default function QuestManager() {
                           data: { is_published: !quest.is_published },
                         })
                       }
-                      className={`p-1.5 rounded transition-colors ${
+                      className={`p-1.5 rounded transition-colors duration-200 cursor-pointer ${
                         quest.is_published
-                          ? 'text-green hover:text-green/80'
+                          ? 'text-success hover:text-success/80'
                           : 'text-text-muted hover:text-text-primary'
                       }`}
                       title={quest.is_published ? 'Unpublish' : 'Publish'}
@@ -151,12 +168,10 @@ export default function QuestManager() {
                       )}
                     </button>
                     <button
-                      onClick={() => {
-                        if (confirm('Delete this quest?')) {
-                          deleteQuestMutation.mutate(quest.id);
-                        }
-                      }}
-                      className="p-1.5 text-text-muted hover:text-red-400 transition-colors"
+                      onClick={() =>
+                        setDeleteTarget({ type: 'quest', id: quest.id, name: quest.title })
+                      }
+                      className="p-1.5 text-text-muted hover:text-error transition-colors duration-200 cursor-pointer"
                       aria-label="Delete quest"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -165,17 +180,17 @@ export default function QuestManager() {
 
                   {/* Levels */}
                   {isExpanded && (
-                    <div className="border-t border-border bg-dark-900/50 p-4 space-y-2">
+                    <div className="border-t border-border bg-surface-base/50 p-4 space-y-2">
                       {questLevels.map((level) => (
                         <div
                           key={level.id}
-                          className="flex items-center gap-3 px-3 py-2 bg-dark-700/50 rounded-lg"
+                          className="flex items-center gap-3 px-3 py-2 bg-surface-overlay/50 rounded-lg"
                         >
-                          <span className="text-xs text-text-muted w-6 text-center">
+                          <span className="text-xs text-text-muted w-6 text-center font-code">
                             {level.order_index}
                           </span>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm text-text-primary">{level.title}</p>
+                            <p className="text-sm text-text-primary font-body">{level.title}</p>
                             <p className="text-[11px] text-text-muted font-code">{level.slug}</p>
                           </div>
                           <button
@@ -185,9 +200,9 @@ export default function QuestManager() {
                                 data: { is_published: !level.is_published },
                               })
                             }
-                            className={`p-1 rounded transition-colors ${
+                            className={`p-1 rounded transition-colors duration-200 cursor-pointer ${
                               level.is_published
-                                ? 'text-green hover:text-green/80'
+                                ? 'text-success hover:text-success/80'
                                 : 'text-text-muted hover:text-text-primary'
                             }`}
                             aria-label={level.is_published ? 'Unpublish level' : 'Publish level'}
@@ -199,12 +214,10 @@ export default function QuestManager() {
                             )}
                           </button>
                           <button
-                            onClick={() => {
-                              if (confirm('Delete this level?')) {
-                                deleteLevelMutation.mutate(level.id);
-                              }
-                            }}
-                            className="p-1 text-text-muted hover:text-red-400 transition-colors"
+                            onClick={() =>
+                              setDeleteTarget({ type: 'level', id: level.id, name: level.title })
+                            }
+                            className="p-1 text-text-muted hover:text-error transition-colors duration-200 cursor-pointer"
                             aria-label="Delete level"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -223,7 +236,7 @@ export default function QuestManager() {
                       ) : (
                         <button
                           onClick={() => setNewLevelForm(quest.id)}
-                          className="flex items-center gap-2 px-3 py-2 text-xs text-text-muted hover:text-primary transition-colors"
+                          className="flex items-center gap-2 px-3 py-2 text-xs text-text-muted hover:text-primary transition-colors duration-200 cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />
                           Add Level
@@ -231,11 +244,32 @@ export default function QuestManager() {
                       )}
                     </div>
                   )}
-                </div>
+                </Card>
               );
             })}
           </div>
         )}
+
+        {/* Delete Confirmation Modal */}
+        <Modal
+          open={deleteTarget !== null}
+          onClose={() => setDeleteTarget(null)}
+          title={`Delete ${deleteTarget?.type === 'quest' ? 'Quest' : 'Level'}`}
+        >
+          <p className="text-sm text-text-secondary font-body mb-6">
+            Are you sure you want to delete{' '}
+            <span className="font-semibold text-text-primary">{deleteTarget?.name}</span>? This
+            action cannot be undone.
+          </p>
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" size="sm" onClick={() => setDeleteTarget(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" size="sm" onClick={handleConfirmDelete}>
+              Delete
+            </Button>
+          </div>
+        </Modal>
       </div>
     </AdminLayout>
   );
@@ -254,36 +288,28 @@ function NewQuestForm({
   const [slug, setSlug] = useState('');
 
   return (
-    <div className="bg-dark-card border border-border rounded-xl p-4 mb-4">
+    <Card className="p-4 mb-4">
       <div className="flex items-center gap-3">
-        <input
-          type="text"
+        <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Quest title"
-          className="flex-1 bg-dark-700 border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary"
+          className="flex-1"
         />
-        <input
-          type="text"
+        <Input
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           placeholder="slug"
-          className="w-48 bg-dark-700 border border-border rounded-lg px-3 py-2 text-sm text-text-primary font-code placeholder:text-text-muted focus:outline-none focus:border-primary"
+          className="w-48 font-code"
         />
-        <button
-          onClick={() => onSubmit({ title, slug, order_index: orderIndex })}
-          className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-light transition-colors"
-        >
+        <Button size="sm" onClick={() => onSubmit({ title, slug, order_index: orderIndex })}>
           Create
-        </button>
-        <button
-          onClick={onCancel}
-          className="text-sm text-text-muted hover:text-text-primary transition-colors"
-        >
+        </Button>
+        <Button variant="ghost" size="sm" onClick={onCancel}>
           Cancel
-        </button>
+        </Button>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -302,33 +328,28 @@ function NewLevelForm({
   const [slug, setSlug] = useState('');
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 bg-dark-700/30 rounded-lg">
-      <input
-        type="text"
+    <div className="flex items-center gap-2 px-3 py-2 bg-surface-overlay/30 rounded-lg">
+      <Input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Level title"
-        className="flex-1 bg-dark-700 border border-border rounded px-2 py-1.5 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary"
+        className="flex-1 h-8 text-xs"
       />
-      <input
-        type="text"
+      <Input
         value={slug}
         onChange={(e) => setSlug(e.target.value)}
         placeholder="slug"
-        className="w-32 bg-dark-700 border border-border rounded px-2 py-1.5 text-xs text-text-primary font-code placeholder:text-text-muted focus:outline-none focus:border-primary"
+        className="w-32 h-8 text-xs font-code"
       />
-      <button
+      <Button
+        size="sm"
         onClick={() => onSubmit({ quest_id: questId, title, slug, order_index: orderIndex })}
-        className="bg-primary text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-primary-light transition-colors"
       >
         Add
-      </button>
-      <button
-        onClick={onCancel}
-        className="text-xs text-text-muted hover:text-text-primary transition-colors"
-      >
+      </Button>
+      <Button variant="ghost" size="sm" onClick={onCancel}>
         Cancel
-      </button>
+      </Button>
     </div>
   );
 }

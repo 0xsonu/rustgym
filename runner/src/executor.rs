@@ -1,7 +1,8 @@
 use std::time::Instant;
 
 use bollard::container::{
-    KillContainerOptions, LogsOptions, RemoveContainerOptions, WaitContainerOptions,
+    InspectContainerOptions, KillContainerOptions, LogsOptions, RemoveContainerOptions,
+    WaitContainerOptions,
 };
 use bollard::Docker;
 use futures_util::StreamExt;
@@ -134,6 +135,7 @@ impl DockerExecutor {
 
     /// Wait for the container to finish and return its exit code.
     async fn wait_for_container(&self, container_name: &str) -> Result<i64, ExecutorError> {
+        // First try the wait API
         let mut stream = self.docker.wait_container(
             container_name,
             Some(WaitContainerOptions {
@@ -143,12 +145,39 @@ impl DockerExecutor {
 
         if let Some(result) = stream.next().await {
             match result {
-                Ok(response) => Ok(response.status_code),
-                Err(e) => Err(ExecutorError::Docker(e)),
+                Ok(response) => return Ok(response.status_code),
+                Err(e) => {
+                    tracing::warn!(
+                        container = %container_name,
+                        error = %e,
+                        "wait_container failed, falling back to polling"
+                    );
+                }
             }
-        } else {
-            // Stream ended without a result — treat as error
-            Err(ExecutorError::ContainerWaitFailed)
+        }
+
+        // Fallback: poll container state via inspect
+        loop {
+            tokio::time::sleep(Duration::from_millis(200)).await;
+            match self
+                .docker
+                .inspect_container(container_name, None::<InspectContainerOptions>)
+                .await
+            {
+                Ok(info) => {
+                    if let Some(state) = info.state {
+                        let running = state.running.unwrap_or(false);
+                        if !running {
+                            return Ok(state.exit_code.unwrap_or(-1));
+                        }
+                    }
+                }
+                Err(e) => {
+                    // Container may have been removed already
+                    tracing::warn!(container = %container_name, error = %e, "inspect failed during poll");
+                    return Err(ExecutorError::Docker(e));
+                }
+            }
         }
     }
 
@@ -252,6 +281,7 @@ pub enum ExecutorError {
     Docker(#[from] bollard::errors::Error),
 
     #[error("Container wait stream ended unexpectedly")]
+    #[allow(dead_code)]
     ContainerWaitFailed,
 
     #[error("Failed to build tar archive: {0}")]

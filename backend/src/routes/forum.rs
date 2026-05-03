@@ -26,14 +26,14 @@ use entity::{forum_posts, forum_replies, users};
 pub fn router(state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/posts", post(create_post))
-        .route("/posts/{id}/reply", post(create_reply))
-        .route("/posts/{id}/vote", put(vote_post))
-        .route("/replies/{id}/accept", put(accept_reply))
+        .route("/posts/:id/reply", post(create_reply))
+        .route("/posts/:id/vote", put(vote_post))
+        .route("/replies/:id/accept", put(accept_reply))
         .route_layer(middleware::from_fn_with_state(state, auth_middleware));
 
     Router::new()
         .route("/posts", get(list_posts))
-        .route("/posts/{id}", get(get_post))
+        .route("/posts/:id", get(get_post))
         .merge(auth_routes)
 }
 

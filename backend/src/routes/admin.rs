@@ -35,30 +35,30 @@ pub fn router(state: AppState) -> Router<AppState> {
         // Quest CRUD
         .route("/quests", get(list_quests))
         .route("/quests", post(create_quest))
-        .route("/quests/{id}", get(get_quest))
-        .route("/quests/{id}", put(update_quest))
-        .route("/quests/{id}", delete(delete_quest))
+        .route("/quests/:id", get(get_quest))
+        .route("/quests/:id", put(update_quest))
+        .route("/quests/:id", delete(delete_quest))
         // Level CRUD
         .route("/levels", get(list_levels))
         .route("/levels", post(create_level))
-        .route("/levels/{id}", get(get_level))
-        .route("/levels/{id}", put(update_level))
-        .route("/levels/{id}", delete(delete_level))
+        .route("/levels/:id", get(get_level))
+        .route("/levels/:id", put(update_level))
+        .route("/levels/:id", delete(delete_level))
         // Task CRUD
         .route("/tasks", get(list_tasks))
         .route("/tasks", post(create_task))
-        .route("/tasks/{id}", get(get_task))
-        .route("/tasks/{id}", put(update_task))
-        .route("/tasks/{id}", delete(delete_task))
+        .route("/tasks/:id", get(get_task))
+        .route("/tasks/:id", put(update_task))
+        .route("/tasks/:id", delete(delete_task))
         // Achievement CRUD
         .route("/achievements", get(list_achievements))
         .route("/achievements", post(create_achievement))
-        .route("/achievements/{id}", get(get_achievement))
-        .route("/achievements/{id}", put(update_achievement))
+        .route("/achievements/:id", get(get_achievement))
+        .route("/achievements/:id", put(update_achievement))
         // User management
         .route("/users", get(list_users))
-        .route("/users/{id}", put(update_user_role))
-        .route("/users/{id}", delete(ban_user))
+        .route("/users/:id", put(update_user_role))
+        .route("/users/:id", delete(ban_user))
         // Submissions
         .route("/submissions", get(list_submissions))
         .route_layer(middleware::from_fn(require_admin))
@@ -136,7 +136,7 @@ async fn get_stats(
         });
     }
 
-    popular_tasks.sort_by(|a, b| b.submission_count.cmp(&a.submission_count));
+    popular_tasks.sort_by_key(|t| std::cmp::Reverse(t.submission_count));
     popular_tasks.truncate(5);
 
     Ok(Json(AdminStatsResponse {

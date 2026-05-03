@@ -21,7 +21,7 @@ use entity::submissions;
 pub fn router(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", get(list_submissions))
-        .route("/{id}", get(get_submission))
+        .route("/:id", get(get_submission))
         .route_layer(middleware::from_fn_with_state(state, auth_middleware))
 }
 

@@ -9,13 +9,64 @@ import type {
   AdminSubmissionListResponse,
 } from '@/types/admin';
 
+import type { AuthResponse } from '@/types';
+
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+
+let isRefreshing = false;
+let refreshPromise: Promise<boolean> | null = null;
 
 function getToken(): string | null {
   return localStorage.getItem('rustgym_access_token');
 }
 
-async function adminRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+function getRefreshToken(): string | null {
+  return localStorage.getItem('rustgym_refresh_token');
+}
+
+async function attemptAdminRefresh(): Promise<boolean> {
+  if (isRefreshing && refreshPromise) {
+    return refreshPromise;
+  }
+
+  isRefreshing = true;
+  refreshPromise = (async () => {
+    try {
+      const rt = getRefreshToken();
+      if (!rt) {
+        return false;
+      }
+
+      const response = await fetch(`${BASE_URL}/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: rt }),
+      });
+
+      if (!response.ok) {
+        localStorage.removeItem('rustgym_access_token');
+        localStorage.removeItem('rustgym_refresh_token');
+        return false;
+      }
+
+      const data = (await response.json()) as AuthResponse;
+      localStorage.setItem('rustgym_access_token', data.access_token);
+      localStorage.setItem('rustgym_refresh_token', data.refresh_token);
+      return true;
+    } catch {
+      localStorage.removeItem('rustgym_access_token');
+      localStorage.removeItem('rustgym_refresh_token');
+      return false;
+    } finally {
+      isRefreshing = false;
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+}
+
+async function adminRequest<T>(path: string, options: RequestInit = {}, retry = true): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
@@ -30,6 +81,13 @@ async function adminRequest<T>(path: string, options: RequestInit = {}): Promise
     ...options,
     headers,
   });
+
+  if (response.status === 401 && retry && getRefreshToken()) {
+    const refreshed = await attemptAdminRefresh();
+    if (refreshed) {
+      return adminRequest<T>(path, options, false);
+    }
+  }
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({ message: 'Request failed' }));

@@ -56,7 +56,7 @@ export default function QuestMapSection() {
         <h2 className="font-display text-[clamp(34px,4vw,52px)] font-extrabold leading-tight mb-4">
           Your Rust <span className="text-primary">Learning Path</span>
         </h2>
-        <p className="text-[17px] text-text-secondary max-w-[580px] leading-relaxed">
+        <p className="text-[17px] text-text-secondary max-w-[580px] leading-relaxed font-body">
           7 epic quests, 90+ levels, 1,400+ tasks. From &ldquo;Hello, Ferris!&rdquo; to deploying
           production Rust.
         </p>
@@ -66,14 +66,14 @@ export default function QuestMapSection() {
             {quests.map((q) => (
               <div
                 key={q.name}
-                className={`shrink-0 bg-dark-card border rounded-[14px] px-6 py-5 min-w-[200px] transition-all hover:border-primary hover:-translate-y-[3px] ${
+                className={`shrink-0 bg-surface-elevated border rounded-[14px] px-6 py-5 min-w-[200px] transition-all hover:border-primary hover:-translate-y-[3px] cursor-pointer ${
                   q.active ? 'border-primary bg-primary/[0.05]' : 'border-border'
                 }`}
               >
                 <div className="font-code text-[11px] text-text-muted mb-1.5">{q.level}</div>
                 <div className="font-display text-lg font-bold mb-1">{q.name}</div>
-                <div className="text-xs text-text-muted">{q.tasks}</div>
-                <div className="h-[3px] bg-dark-700 rounded mt-3.5 overflow-hidden">
+                <div className="text-xs text-text-muted font-body">{q.tasks}</div>
+                <div className="h-[3px] bg-slate-800 rounded mt-3.5 overflow-hidden">
                   <div className="h-full bg-primary rounded" style={{ width: `${q.progress}%` }} />
                 </div>
               </div>

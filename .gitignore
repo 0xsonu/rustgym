@@ -62,3 +62,10 @@ tarpaulin-report.html
 # MinIO data (local dev)
 # =========================
 minio-data/
+
+# =========================
+# Dev script artifacts
+# =========================
+.dev-pids
+.dev-backend.log
+.dev-frontend.log

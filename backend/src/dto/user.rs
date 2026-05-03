@@ -1,6 +1,10 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+use crate::dto::auth::UserResponse;
+use crate::dto::gamification::AchievementResponse;
+use crate::dto::quest::QuestSummary;
+
 // ─── Request Types ───────────────────────────────────────────────────────────
 
 #[derive(Debug, Deserialize)]
@@ -24,6 +28,27 @@ pub struct PublicProfileResponse {
     pub level: i32,
     pub streak_days: i32,
     pub created_at: String,
+}
+
+// ─── Dashboard Types ─────────────────────────────────────────────────────────
+
+#[derive(Debug, Serialize)]
+pub struct RecentSubmissionResponse {
+    pub id: Uuid,
+    pub task_id: Uuid,
+    pub task_slug: String,
+    pub task_title: String,
+    pub status: String,
+    pub created_at: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct DashboardResponse {
+    pub user: UserResponse,
+    pub recent_submissions: Vec<RecentSubmissionResponse>,
+    pub recent_achievements: Vec<AchievementResponse>,
+    pub active_quest: Option<QuestSummary>,
+    pub leaderboard_rank: Option<i64>,
 }
 
 // ─── Conversions ─────────────────────────────────────────────────────────────

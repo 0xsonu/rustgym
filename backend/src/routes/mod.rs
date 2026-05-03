@@ -20,6 +20,7 @@ pub fn api_router(state: &AppState) -> Router<AppState> {
         .nest("/api/v1/auth", auth::router())
         .nest("/api/v1/users", users::router(state.clone()))
         .nest("/api/v1/users", achievements::router(state.clone()))
+        .nest("/api/v1/achievements", achievements::public_router())
         .nest("/api/v1/users/leaderboard", leaderboard::router())
         .nest("/api/v1/quests", quests::router())
         .nest("/api/v1/tasks", tasks::router(state.clone()))

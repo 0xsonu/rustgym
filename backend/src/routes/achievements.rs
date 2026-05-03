@@ -11,11 +11,16 @@ use crate::{
 
 use entity::{achievements, user_achievements};
 
-/// Build the achievements router.
+/// Build the authenticated achievements router (nested under /users).
 pub fn router(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/me/achievements", get(get_my_achievements))
         .route_layer(middleware::from_fn_with_state(state, auth_middleware))
+}
+
+/// Build the public achievements router (no auth required).
+pub fn public_router() -> Router<AppState> {
+    Router::new().route("/", get(get_all_achievements))
 }
 
 // ─── GET /api/v1/users/me/achievements ───────────────────────────────────────
@@ -67,4 +72,29 @@ async fn get_my_achievements(
         total_earned,
         total_available,
     }))
+}
+
+// ─── GET /api/v1/achievements ────────────────────────────────────────────────
+
+async fn get_all_achievements(
+    State(state): State<AppState>,
+) -> Result<Json<Vec<AchievementResponse>>, AppError> {
+    // Load all achievements
+    let all_achievements = achievements::Entity::find().all(&state.db).await?;
+
+    let achievements_response: Vec<AchievementResponse> = all_achievements
+        .into_iter()
+        .map(|a| AchievementResponse {
+            id: a.id,
+            slug: a.slug,
+            name: a.name,
+            description: a.description,
+            icon: a.icon,
+            xp_reward: a.xp_reward,
+            is_earned: false,
+            earned_at: None,
+        })
+        .collect();
+
+    Ok(Json(achievements_response))
 }

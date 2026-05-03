@@ -19,12 +19,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 flex">
+    <div className="min-h-screen bg-surface-base flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-dark-900 border-r border-border flex flex-col shrink-0">
+      <aside className="w-64 bg-surface-elevated border-r border-border flex flex-col shrink-0">
         <div className="p-5 border-b border-border">
           <Link to="/admin" className="flex items-center gap-2.5">
-            <Shield className="w-5 h-5 text-primary" />
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Shield className="w-4.5 h-4.5 text-primary" />
+            </div>
             <span className="font-display text-lg font-bold text-text-primary">Admin Panel</span>
           </Link>
         </div>
@@ -38,10 +40,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Link
                 key={item.href}
                 to={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
                   isActive
-                    ? 'bg-primary/10 text-primary border border-primary/20'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-dark-700'
+                    ? 'bg-primary/10 text-primary border-l-[3px] border-l-primary pl-[9px]'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-overlay'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -53,7 +55,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-4 border-t border-border">
           <Link
             to="/dashboard"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 font-body"
           >
             ← Back to App
           </Link>

@@ -1,23 +1,24 @@
+import { Zap, Gamepad2, Brain, Map } from 'lucide-react';
 import { FadeIn } from '../Landing';
 
 const features = [
   {
-    icon: '⚡',
+    icon: Zap,
     title: '80% Practice, 20% Theory',
     desc: 'Rust is learned by writing Rust. Our 1,400+ coding tasks start from your very first lesson. The borrow checker becomes your friend, not your enemy — through repetition, not reading.',
   },
   {
-    icon: '🎮',
+    icon: Gamepad2,
     title: 'Gamified Learning Journey',
     desc: 'Earn XP, unlock quests, level up your Rustacean rank, and collect achievements. Your progress is saved automatically — pick up exactly where you left off, on any device.',
   },
   {
-    icon: '🧠',
+    icon: Brain,
     title: 'AI-Powered Code Review',
     desc: 'Every solution gets reviewed by an AI mentor trained on idiomatic Rust. Get personalized tips on performance, safety, and style — not just "wrong" or "right".',
   },
   {
-    icon: '🗺️',
+    icon: Map,
     title: 'Structured Quest Roadmap',
     desc: 'Your curriculum is broken into focused quests — Syntax, Ownership, Traits, Async, Systems, WebAssembly, and more. Each quest is a complete module, sized for real-life schedules.',
   },
@@ -33,26 +34,29 @@ export default function FeaturesSection() {
         <h2 className="font-display text-[clamp(34px,4vw,52px)] font-extrabold leading-tight mb-4">
           Why learn <span className="text-primary">Rust with RustGym</span>
         </h2>
-        <p className="text-[17px] text-text-secondary max-w-[580px] leading-relaxed">
+        <p className="text-[17px] text-text-secondary max-w-[580px] leading-relaxed font-body">
           Everything you need to go from curious beginner to confident systems programmer — without
           the usual frustration.
         </p>
 
         <FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="group bg-dark-card border border-border rounded-2xl p-8 transition-all relative overflow-hidden hover:border-border-light hover:-translate-y-[3px]"
-              >
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-[22px] mb-5">
-                  {f.icon}
+            {features.map((f) => {
+              const Icon = f.icon;
+              return (
+                <div
+                  key={f.title}
+                  className="group bg-surface-elevated border border-border rounded-2xl p-8 transition-all relative overflow-hidden hover:border-border-light hover:-translate-y-[3px] cursor-pointer"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                    <Icon className="w-6 h-6 text-primary" aria-hidden="true" />
+                  </div>
+                  <h3 className="font-display text-xl font-bold mb-2.5">{f.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed font-body">{f.desc}</p>
                 </div>
-                <h3 className="font-display text-xl font-bold mb-2.5">{f.title}</h3>
-                <p className="text-sm text-text-secondary leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </FadeIn>
       </div>
